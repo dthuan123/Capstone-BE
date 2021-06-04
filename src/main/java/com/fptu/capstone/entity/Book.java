@@ -12,7 +12,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "book_name")
+    @Column(name = "book_name1")
     private String name;
 
     @OneToMany(mappedBy="book")
