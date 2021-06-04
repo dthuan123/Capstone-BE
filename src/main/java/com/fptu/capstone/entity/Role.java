@@ -3,33 +3,24 @@ package com.fptu.capstone.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-public class Book {
+public class Role {
+
     @Id
-    @Column(name = "book_id")
+    @Column(name = "role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "book_name")
+    @Column(name = "role_name")
     private String name;
 
-    @OneToMany(mappedBy="book")
+    @OneToOne(mappedBy = "role")
     @JsonBackReference
-    private List<Comment> comments;
-
+    private User user;
 
     public int getId() {
         return id;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
     }
 
     public void setId(int id) {
@@ -43,5 +34,12 @@ public class Book {
     public void setName(String name) {
         this.name = name;
     }
-}
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+}
