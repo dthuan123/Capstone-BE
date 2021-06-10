@@ -1,11 +1,12 @@
 package com.fptu.capstone.repository;
 
 import com.fptu.capstone.entity.Book;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface BookRepository extends CrudRepository<Book, Integer> {
-    List<Book> findAll();
-
+public interface BookRepository extends JpaRepository<Book, Integer> {
+    List<Book> findById(int id);
 }

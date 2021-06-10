@@ -1,8 +1,10 @@
 package com.fptu.capstone.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "AppUser")
@@ -14,7 +16,7 @@ public class User {
     private int id;
 
     @Column(name = "approved")
-    private boolean approved;
+    private Boolean approved;
 
     @Column(name = "user_name")
     private String name;
@@ -41,12 +43,22 @@ public class User {
     private String profileImageLink;
 
     @Column(name = "enabled")
-    private boolean enabled;
+    private Boolean enabled;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "role_id")
-    @JsonManagedReference
     private Role role;
+
+    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Book> books;
+
+    @ManyToMany
+    @JoinTable(
+            name = "UserLikeList",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id"))
+    List<Book> likedList;
 
     public int getId() {
         return id;
@@ -56,11 +68,11 @@ public class User {
         this.id = id;
     }
 
-    public boolean isApproved() {
+    public Boolean getApproved() {
         return approved;
     }
 
-    public void setApproved(boolean approved) {
+    public void setApproved(Boolean approved) {
         this.approved = approved;
     }
 
@@ -128,11 +140,11 @@ public class User {
         this.profileImageLink = profileImageLink;
     }
 
-    public boolean isEnabled() {
+    public Boolean getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
@@ -142,5 +154,21 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+
+    public List<Book> getLikedList() {
+        return likedList;
+    }
+
+    public void setLikedList(List<Book> likedList) {
+        this.likedList = likedList;
     }
 }
