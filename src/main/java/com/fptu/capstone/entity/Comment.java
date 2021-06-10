@@ -1,6 +1,7 @@
 package com.fptu.capstone.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.BatchSize;
 
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="CommentBook")
+@Table(name="BookComment")
 public class Comment {
 
     @Id
@@ -30,9 +31,9 @@ public class Comment {
     @BatchSize(size=2)
     private List<Comment> replies = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
-    @JsonManagedReference
+    @JsonIgnore
     private Book book;
 
     public int getId() {
