@@ -1,25 +1,24 @@
 package com.fptu.capstone.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Role {
+public class BookStatus {
 
     @Id
-    @Column(name = "role_id")
+    @Column(name = "status_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "role_name")
+    @Column(name= "status_name")
     private String name;
 
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "bookStatus")
     @JsonIgnore
-    private List<User> user;
+    private List<Book> book;
 
     public int getId() {
         return id;
@@ -37,11 +36,11 @@ public class Role {
         this.name = name;
     }
 
-    public List<User> getUser() {
-        return user;
+    public List<Book> getBook() {
+        return book;
     }
 
-    public void setUser(List<User> user) {
-        this.user = user;
+    public void setBook(List<Book> book) {
+        this.book = book;
     }
 }
