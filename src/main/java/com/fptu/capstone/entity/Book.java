@@ -62,6 +62,9 @@ public class Book {
     @JsonIgnore
     List<User> likedUser;
 
+    @OneToMany(mappedBy = "book")
+    private List<Chapter> chapters;
+
     public int getId() {
         return id;
     }
