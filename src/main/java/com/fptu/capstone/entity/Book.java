@@ -65,6 +65,10 @@ public class Book {
     @OneToMany(mappedBy = "book")
     private List<Chapter> chapters;
 
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Report> reports;
+
     public int getId() {
         return id;
     }
