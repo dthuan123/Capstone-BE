@@ -29,7 +29,7 @@ public class Report {
 
     @ManyToOne
     @JoinColumn(name = "receiver_id")
-    private User user_receiver;
+    private User userReceiver;
 
     @ManyToOne
     @JoinColumn(name = "book_id")
@@ -88,11 +88,11 @@ public class Report {
     }
 
     public User getUser_receiver() {
-        return user_receiver;
+        return userReceiver;
     }
 
     public void setUser_receiver(User user_receiver) {
-        this.user_receiver = user_receiver;
+        this.userReceiver = user_receiver;
     }
 
     public Book getBook() {

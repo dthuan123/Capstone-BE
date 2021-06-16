@@ -1,5 +1,6 @@
 package com.fptu.capstone.controller;
 
+import com.fptu.capstone.entity.Book;
 import com.fptu.capstone.entity.Category;
 import com.fptu.capstone.repository.BookRepository;
 import com.fptu.capstone.repository.CategoryRepository;
@@ -24,5 +25,11 @@ public class CategoryController {
     @GetMapping("/category-list")
     public List<Category> listAllCategory(){
         return categoryRepository.findAll();
+    }
+
+    @ResponseBody
+    @GetMapping("/book-list")
+    public List<Book> listBooks(){
+        return bookRepository.findByCategoriesId(1);
     }
 }

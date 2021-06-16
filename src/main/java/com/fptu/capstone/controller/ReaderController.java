@@ -23,9 +23,9 @@ public class ReaderController {
     ReportRepository reportRepository;
 
     @ResponseBody
-    @GetMapping(value="message-list")
-    public List<Report> getMessageListByReader(@RequestHeader int user_id) {
-        return reportRepository.findAllByReceiverId(user_id);
+    @GetMapping("message-list")
+    public List<Report> getMessageListByReader() {
+        return reportRepository.findAllByUserReceiverId(1);
     }
 
 }

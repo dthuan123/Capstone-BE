@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ReportRepository extends JpaRepository<Report, Integer> {
     List<Report> findAll();
-    List<Report> findAllByReceiverId(int id);
+    List<Report> findAllByUserReceiverId(int id);
 }

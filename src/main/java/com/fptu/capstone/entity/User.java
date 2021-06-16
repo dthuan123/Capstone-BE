@@ -63,7 +63,7 @@ public class User {
     @OneToMany(mappedBy = "user_sender")
     private List<Report> report_sender;
 
-    @OneToMany(mappedBy = "user_receiver")
+    @OneToMany(mappedBy = "userReceiver")
     private List<Report> report_receiver;
 
     public int getId() {

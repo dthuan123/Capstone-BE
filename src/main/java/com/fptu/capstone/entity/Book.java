@@ -69,6 +69,13 @@ public class Book {
     @JsonIgnore
     private List<Report> reports;
 
+    @ManyToOne
+    @JoinColumn(name = "alias_id")
+    private Alias alias;
+
+    public Book() {
+    }
+
     public int getId() {
         return id;
     }
