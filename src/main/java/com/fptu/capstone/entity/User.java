@@ -60,6 +60,12 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "book_id"))
     List<Book> likedList;
 
+    @OneToMany(mappedBy = "user_sender")
+    private List<Report> report_sender;
+
+    @OneToMany(mappedBy = "user_receiver")
+    private List<Report> report_receiver;
+
     public int getId() {
         return id;
     }
