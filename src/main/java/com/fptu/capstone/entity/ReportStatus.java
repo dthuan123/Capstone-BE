@@ -11,28 +11,28 @@ public class ReportStatus {
 
     @Id
     @Column(name = "status_id")
-    private int status_id;
+    private int statusId;
 
     @Column(name = "status_name")
-    private String status_name;
+    private String statusName;
 
-    @OneToMany(mappedBy = "status_id")
+    @OneToMany(mappedBy = "statusId")
     private List<Report> reports;
 
-    public int getStatus_id() {
-        return status_id;
+    public int getStatusId() {
+        return statusId;
     }
 
-    public void setStatus_id(int status_id) {
-        this.status_id = status_id;
+    public void setStatusId(int statusId) {
+        this.statusId = statusId;
     }
 
-    public String getStatus_name() {
-        return status_name;
+    public String getStatusName() {
+        return statusName;
     }
 
-    public void setStatus_name(String status_name) {
-        this.status_name = status_name;
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
     }
 
     public List<Report> getReports() {
