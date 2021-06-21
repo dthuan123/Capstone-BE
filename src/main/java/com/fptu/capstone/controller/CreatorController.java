@@ -113,6 +113,24 @@ public class CreatorController {
     }
 
     @ResponseBody
+    @PostMapping(value="create/chapter")
+    public ResponseEntity createChapter(@RequestBody Chapter chapter) {
+        chapterRepository.save(chapter);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @ResponseBody
+    @PostMapping(value="edit/chapter")
+    public ResponseEntity editChapter(@RequestBody Chapter chapter) {
+        Chapter updateChapter = chapterRepository.findById(chapter.getId());
+        updateChapter.setUpdatedDate(new Date());
+        updateChapter.setName(chapter.getName());
+        updateChapter.setContent(chapter.getContent());
+        chapterRepository.save(updateChapter);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @ResponseBody
     @GetMapping(value="get/chapters")
     public Page<Chapter> getChapter(@RequestHeader int page, @RequestHeader int pageSize,
                                     @RequestHeader String sortField, @RequestHeader String sortOrder,

@@ -30,13 +30,13 @@ public class User {
     @Column(name = "user_phone")
     private String phone;
 
-    @Column(name = "user_cmnd")
-    private String identityCardNumber;
+    @Column(name = "user_identity_card")
+    private String identityCard;
 
-    @Column(name = "user_cmnd_front")
+    @Column(name = "user_identity_card_front")
     private String identityCardFront;
 
-    @Column(name = "user_cmnd_back")
+    @Column(name = "user_identity_card_back")
     private String identityCardBack;
 
     @Column(name = "user_image_link")
@@ -119,11 +119,11 @@ public class User {
     }
 
     public String getIdentityCardNumber() {
-        return identityCardNumber;
+        return identityCard;
     }
 
-    public void setIdentityCardNumber(String identityCardNumber) {
-        this.identityCardNumber = identityCardNumber;
+    public void setIdentityCardNumber(String identityCard) {
+        this.identityCard = identityCard;
     }
 
     public String getIdentityCardFront() {
