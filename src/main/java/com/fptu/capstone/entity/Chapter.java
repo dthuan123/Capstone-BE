@@ -1,6 +1,7 @@
 package com.fptu.capstone.entity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Chapter {
@@ -12,6 +13,15 @@ public class Chapter {
 
     @Column(name = "chapter_name")
     private String name;
+
+    @Column(name = "chapter_content")
+    private String content;
+
+    @Column(name = "started_date")
+    private Date startedDate;
+
+    @Column(name = "updated_date")
+    private Date updatedDate;
 
     @ManyToOne
     @JoinColumn(name = "book_id")
@@ -31,6 +41,30 @@ public class Chapter {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Date getStartedDate() {
+        return startedDate;
+    }
+
+    public void setStartedDate(Date startedDate) {
+        this.startedDate = startedDate;
+    }
+
+    public Date getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     public Book getBook() {

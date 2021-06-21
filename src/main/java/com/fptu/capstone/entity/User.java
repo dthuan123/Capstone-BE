@@ -31,13 +31,13 @@ public class User {
     private String phone;
 
     @Column(name = "user_cmnd")
-    private String cmnd;
+    private String identityCardNumber;
 
     @Column(name = "user_cmnd_front")
-    private String cmndFront;
+    private String identityCardFront;
 
     @Column(name = "user_cmnd_back")
-    private String cmndBack;
+    private String identityCardBack;
 
     @Column(name = "user_image_link")
     private String profileImageLink;
@@ -65,6 +65,10 @@ public class User {
 
     @OneToMany(mappedBy = "userReceiver")
     private List<Report> reportsReceiver;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Alias> aliases;
 
     public int getId() {
         return id;
@@ -114,28 +118,52 @@ public class User {
         this.phone = phone;
     }
 
-    public String getCmnd() {
-        return cmnd;
+    public String getIdentityCardNumber() {
+        return identityCardNumber;
     }
 
-    public void setCmnd(String cmnd) {
-        this.cmnd = cmnd;
+    public void setIdentityCardNumber(String identityCardNumber) {
+        this.identityCardNumber = identityCardNumber;
     }
 
-    public String getCmndFront() {
-        return cmndFront;
+    public String getIdentityCardFront() {
+        return identityCardFront;
     }
 
-    public void setCmndFront(String cmndFront) {
-        this.cmndFront = cmndFront;
+    public void setIdentityCardFront(String identityCardFront) {
+        this.identityCardFront = identityCardFront;
     }
 
-    public String getCmndBack() {
-        return cmndBack;
+    public String getIdentityCardBack() {
+        return identityCardBack;
     }
 
-    public void setCmndBack(String cmndBack) {
-        this.cmndBack = cmndBack;
+    public void setIdentityCardBack(String identityCardBack) {
+        this.identityCardBack = identityCardBack;
+    }
+
+    public List<Report> getReport_sender() {
+        return reportsSender;
+    }
+
+    public void setReport_sender(List<Report> report_sender) {
+        this.reportsSender = report_sender;
+    }
+
+    public List<Report> getReport_receiver() {
+        return reportsReceiver;
+    }
+
+    public void setReport_receiver(List<Report> report_receiver) {
+        this.reportsReceiver = report_receiver;
+    }
+
+    public List<Alias> getAliases() {
+        return aliases;
+    }
+
+    public void setAliases(List<Alias> aliases) {
+        this.aliases = aliases;
     }
 
     public String getProfileImageLink() {

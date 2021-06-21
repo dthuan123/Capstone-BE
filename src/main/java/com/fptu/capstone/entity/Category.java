@@ -20,6 +20,15 @@ public class Category {
     @JsonIgnore
     private List<Book> books;
 
+    public Category() {
+    }
+
+    public Category(int id, String name, List<Book> books) {
+        this.id = id;
+        this.name = name;
+        this.books = books;
+    }
+
     public int getId() {
         return id;
     }

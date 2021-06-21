@@ -18,7 +18,7 @@ import java.io.OutputStream;
 @Service
 public class AudioService {
 
-    public void getAudio() {
+    public byte[] getAudio() {
         // Instantiates a client
         try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
             // Set the text input to be synthesized
@@ -46,61 +46,21 @@ public class AudioService {
 
             // Write the response to the output file.
             try (OutputStream out = new FileOutputStream("output.mp3")) {
-                out.write(audioContents.toByteArray());
-                System.out.println("Audio content written to file \"output.mp3\"");
+                //out.write(audioContents.toByteArray());
+                //System.out.println("Audio content written to file \"output.mp3\"");
+                return audioContents.toByteArray();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return null;
     }
 }
 
 
 
-//    public String getAudio() {
-//        try {
-////            Q4iFEkeEYsl85dfIoFkKEBODVFvExVTT
-//            URL url = new URL("https://api.fpt.ai/hmi/tts/v5");
-//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//            conn.setRequestMethod("POST");
-//            conn.setRequestProperty("api_key", "Q4iFEkeEYsl85dfIoFkKEBODVFvExVTT");
-//            conn.setRequestProperty("callback_url", "http://localhost:8000/audio/success");
-//            //conn.setDoInput(true);
-//            conn.setDoOutput(true);
-//            String query = "Hom nay toi di hoc";
-//            conn.getOutputStream().write(query.getBytes("UTF8"));
-//            int statusCode = conn.getResponseCode();
-//
-//            InputStream is = null;
-//
-//            if (statusCode >= 200 && statusCode < 400) {
-//                // Create an InputStream in order to extract the response object
-//                is = conn.getInputStream();
-//            }
-//            else {
-//                is = conn.getErrorStream();
-//            }
-//            //is = conn.getInputStream();
-//            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-//            StringBuilder response = new StringBuilder(); // or StringBuffer if Java version 5+
-//            String line;
-//            while ((line = rd.readLine()) != null) {
-//                System.out.println(line);
-//                response.append(line);
-//                response.append('\r');
-//            }
-//
-//            return response.toString();
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return null;
-//    }
+
 
 

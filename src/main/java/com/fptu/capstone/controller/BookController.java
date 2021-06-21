@@ -31,10 +31,11 @@ public class BookController {
 
     @Autowired
     private UserRepository userRepository;
+
     @ResponseBody
     @GetMapping("/books")
     public List<Book> getALlBooks() {
-        return bookRepository.findById(1);
+        return bookRepository.findAll();
     }
 
     @ResponseBody
