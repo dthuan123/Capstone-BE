@@ -1,12 +1,24 @@
 package com.fptu.capstone.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.fptu.capstone.entity.User;
+import com.fptu.capstone.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
-@RestController
 @RequestMapping("guess")
+
 public class GuestController {
 
+    @Autowired
+    UserRepository userRepository;
+
+    @ResponseBody
+    @PostMapping(value="/register")
+    public ResponseEntity registerUser(@RequestBody User user){
+    userRepository.save(user);
+    return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 }
