@@ -58,13 +58,15 @@ public class User {
             name = "UserLikeList",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id"))
-    List<Book> likedList;
+    private List<Book> likedList;
 
     @OneToMany(mappedBy = "userSender")
-    private List<Report> reportsSender;
+    @JsonIgnore
+    private List<Report> sendReport;
 
     @OneToMany(mappedBy = "userReceiver")
-    private List<Report> reportsReceiver;
+    @JsonIgnore
+    private List<Report> receivedReport;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
@@ -118,11 +120,11 @@ public class User {
         this.phone = phone;
     }
 
-    public String getIdentityCardNumber() {
+    public String getIdentityCard() {
         return identityCard;
     }
 
-    public void setIdentityCardNumber(String identityCard) {
+    public void setIdentityCard(String identityCard) {
         this.identityCard = identityCard;
     }
 
@@ -140,30 +142,6 @@ public class User {
 
     public void setIdentityCardBack(String identityCardBack) {
         this.identityCardBack = identityCardBack;
-    }
-
-    public List<Report> getReport_sender() {
-        return reportsSender;
-    }
-
-    public void setReport_sender(List<Report> report_sender) {
-        this.reportsSender = report_sender;
-    }
-
-    public List<Report> getReport_receiver() {
-        return reportsReceiver;
-    }
-
-    public void setReport_receiver(List<Report> report_receiver) {
-        this.reportsReceiver = report_receiver;
-    }
-
-    public List<Alias> getAliases() {
-        return aliases;
-    }
-
-    public void setAliases(List<Alias> aliases) {
-        this.aliases = aliases;
     }
 
     public String getProfileImageLink() {
@@ -204,5 +182,29 @@ public class User {
 
     public void setLikedList(List<Book> likedList) {
         this.likedList = likedList;
+    }
+
+    public List<Report> getSendReport() {
+        return sendReport;
+    }
+
+    public void setSendReport(List<Report> sendReport) {
+        this.sendReport = sendReport;
+    }
+
+    public List<Report> getReceivedReport() {
+        return receivedReport;
+    }
+
+    public void setReceivedReport(List<Report> receivedReport) {
+        this.receivedReport = receivedReport;
+    }
+
+    public List<Alias> getAliases() {
+        return aliases;
+    }
+
+    public void setAliases(List<Alias> aliases) {
+        this.aliases = aliases;
     }
 }

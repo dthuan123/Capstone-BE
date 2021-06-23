@@ -1,5 +1,7 @@
 package com.fptu.capstone.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -17,6 +19,7 @@ public class ReportStatus {
     private String statusName;
 
     @OneToMany(mappedBy = "statusId")
+    @JsonIgnore
     private List<Report> reports;
 
     public int getStatusId() {

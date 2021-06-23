@@ -5,6 +5,9 @@ import com.fptu.capstone.entity.Category;
 import com.fptu.capstone.repository.BookRepository;
 import com.fptu.capstone.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +29,9 @@ public class CategoryController {
 
     @ResponseBody
     @GetMapping("/book-list")
-    public List<Book> listBooks(@RequestHeader int categoryId){
-        return bookRepository.findByCategoriesId(categoryId);
+    public Page<Book> listBooks(@RequestHeader int categoryId, @RequestHeader int page, @RequestHeader int pageSize,
+                                @RequestHeader String sortField, @RequestHeader String sortOrder) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return bookRepository.findByCategoriesId(categoryId, pageable);
     }
 }

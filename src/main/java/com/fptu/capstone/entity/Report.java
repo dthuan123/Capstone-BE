@@ -1,5 +1,7 @@
 package com.fptu.capstone.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -33,6 +35,7 @@ public class Report {
 
     @ManyToOne
     @JoinColumn(name = "book_id")
+    @JsonIgnore
     private Book book;
 
     @ManyToOne
