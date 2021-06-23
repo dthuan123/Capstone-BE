@@ -3,8 +3,6 @@ package com.fptu.capstone.controller;
 import com.fptu.capstone.entity.User;
 import com.fptu.capstone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -24,17 +22,5 @@ public class AuthenticationController {
         }
 
         return null;
-    }
-
-    @ResponseBody
-    @PostMapping(value="/register")
-    public ResponseEntity registerUser(@RequestBody User user) {
-        User db = userRepository.findByName(user.getName());
-        if(db != null) {
-            //bi trung
-        }
-        userRepository.save(user);
-
-        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }
