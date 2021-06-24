@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,6 +33,12 @@ public class BookController {
     @GetMapping("/books")
     public List<Book> getALlBooks() {
         return bookRepository.findAll();
+    }
+
+    @ResponseBody
+    @GetMapping("/book-by-id")
+    public Book getBookById(@RequestHeader int id){
+        return bookRepository.findById(id);
     }
 
     @ResponseBody
