@@ -15,10 +15,5 @@ public class GuestController {
     @Autowired
     UserRepository userRepository;
 
-    @ResponseBody
-    @PostMapping(value="/register")
-    public ResponseEntity registerUser(@RequestBody User user){
-    userRepository.save(user);
-    return ResponseEntity.status(HttpStatus.OK).body(null);
-    }
+
 }
