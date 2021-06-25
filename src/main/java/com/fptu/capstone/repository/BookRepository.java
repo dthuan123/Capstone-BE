@@ -15,4 +15,6 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     List<Book> findAll();
     Book findById(int id);
     Page<Book> findByCategoriesId(int categoryId, Pageable pageable);
+    Page<Book> findALlByCreatorId(int id, Pageable pageable);
+    Page<Book> findALlByCreatorIdAndNameContains(int id, String name, Pageable pageable);
 }

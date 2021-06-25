@@ -37,8 +37,8 @@ public class BookController {
 
     @ResponseBody
     @GetMapping("/book-by-id")
-    public Book getBookById(@RequestHeader int id){
-        return bookRepository.findById(id);
+    public Book getBookById(@RequestHeader int bookId){
+        return bookRepository.findById(bookId);
     }
 
     @ResponseBody

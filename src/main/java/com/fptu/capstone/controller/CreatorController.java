@@ -1,10 +1,7 @@
 package com.fptu.capstone.controller;
 
 import com.fptu.capstone.entity.*;
-import com.fptu.capstone.repository.AliasRepository;
-import com.fptu.capstone.repository.BookRepository;
-import com.fptu.capstone.repository.CategoryRepository;
-import com.fptu.capstone.repository.ChapterRepository;
+import com.fptu.capstone.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,21 +35,23 @@ public class CreatorController {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    BookStatusRepository bookStatusRepository;
+
     private static String imageBaseURL = "http://localhost:8000/content/images/books/";
 
 
     @ResponseBody
     @GetMapping("get/books")
-    public Page<Book> getBookListByCreator(@RequestHeader int page, @RequestHeader int pageSize,
-                                           @RequestHeader String sortField, @RequestHeader String sortOrder) {
-        Sort sort = Sort.by(sortField).ascending();
-        if(sortOrder == "des") {
-            sort.descending();
+    public Page<Book> getBookListByCreator(@RequestHeader int creatorId, @RequestHeader String searchKeyword,
+                                           @RequestHeader int page, @RequestHeader int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        if(!searchKeyword.equals("")) {
+            return bookRepository.findALlByCreatorIdAndNameContains(creatorId, searchKeyword, pageable);
         }
 
-        Pageable pageable = PageRequest.of(page, pageSize, sort);
-
-        return bookRepository.findAll(pageable);
+        return bookRepository.findALlByCreatorId(creatorId, pageable);
     }
 
     @ResponseBody
@@ -101,6 +100,33 @@ public class CreatorController {
     }
 
     @ResponseBody
+    @PostMapping(value="update/book", consumes = {   "multipart/form-data" })
+    public boolean updateBook(@RequestPart("book") Book book, @RequestPart(value = "coverImage", required=false) MultipartFile coverImage) {
+        book.setUpdatedDate(new Date());
+        Book savedBook = bookRepository.save(book);
+
+        try {
+            if(coverImage != null) {
+                byte[] bytes = coverImage.getBytes();
+                String fileName = coverImage.getOriginalFilename();
+                String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+                fileName = savedBook.getId() + "." + extension;
+
+                savedBook.setImageLink(imageBaseURL + fileName);
+                bookRepository.save(savedBook);
+                BufferedOutputStream bf = new BufferedOutputStream(new FileOutputStream(new File(
+                        "src/main/content/images/books/" + fileName
+                )));
+                bf.write(bytes);
+                bf.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    @ResponseBody
     @PostMapping(value="create/alias")
     public ResponseEntity createAlias(@RequestBody Alias alias) {
         if(aliasRepository.findByName(alias.getName()) != null) {
@@ -115,6 +141,7 @@ public class CreatorController {
     @ResponseBody
     @PostMapping(value="create/chapter")
     public ResponseEntity createChapter(@RequestBody Chapter chapter) {
+        chapter.setStartedDate(new Date());
         chapterRepository.save(chapter);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
@@ -131,11 +158,22 @@ public class CreatorController {
     }
 
     @ResponseBody
+    @DeleteMapping(value="delete/chapter")
+    public ResponseEntity deleteChapter(@RequestHeader int chapterId) {
+        chapterRepository.deleteById(chapterId);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @ResponseBody
     @GetMapping(value="get/chapters")
-    public Page<Chapter> getChapter(@RequestHeader int page, @RequestHeader int pageSize,
-                                    @RequestHeader String sortField, @RequestHeader String sortOrder,
-                                    @RequestHeader int bookId) {
+    public Page<Chapter> getChapter(@RequestHeader int bookId, @RequestHeader String searchKeyword,
+                                    @RequestHeader int page, @RequestHeader int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
+
+        if(!searchKeyword.equals("")) {
+            return chapterRepository.findALlByBookIdAndNameContains(bookId, searchKeyword, pageable);
+        }
+
         return chapterRepository.findChapterByBookId(bookId, pageable);
     }
 //
@@ -155,5 +193,11 @@ public class CreatorController {
     @GetMapping(value="get/categories")
     public List<Category> getCategories() {
         return categoryRepository.findAll();
+    }
+
+    @ResponseBody
+    @GetMapping(value="get/bookStatuses")
+    public List<BookStatus> getBookStatuses() {
+        return bookStatusRepository.findAll();
     }
 }
