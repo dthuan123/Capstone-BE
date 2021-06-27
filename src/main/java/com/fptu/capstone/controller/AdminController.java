@@ -4,6 +4,7 @@ package com.fptu.capstone.controller;
 import com.fptu.capstone.entity.Chapter;
 import com.fptu.capstone.entity.Report;
 import com.fptu.capstone.entity.User;
+import com.fptu.capstone.repository.ReportRepository;
 import com.fptu.capstone.repository.UserRepository;
 import com.fptu.capstone.service.UserEditService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import java.util.List;
 public class AdminController {
     @Autowired
     UserRepository userRepository;
+    ReportRepository reportRepository;
     private final UserEditService userEditService;
 
     public AdminController(UserEditService userEditService) {
@@ -56,4 +58,11 @@ public class AdminController {
     public boolean enabled(@RequestHeader int userid) {
         return userEditService.enabled(userid);
     }
+
+    @ResponseBody
+    @GetMapping("report-all")
+    public List<Report> getAll() {
+        return reportRepository.findAll();
+    }
+
 }
