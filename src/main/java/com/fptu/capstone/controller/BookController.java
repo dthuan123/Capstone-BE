@@ -2,10 +2,12 @@ package com.fptu.capstone.controller;
 
 import com.fptu.capstone.entity.Book;
 //import com.example.demo_be.entity.Comment;
+import com.fptu.capstone.entity.Chapter;
 import com.fptu.capstone.entity.Comment;
 import com.fptu.capstone.entity.User;
 import com.fptu.capstone.repository.BookRepository;
 //import com.example.demo_be.repository.CommentRepository;
+import com.fptu.capstone.repository.ChapterRepository;
 import com.fptu.capstone.repository.CommentRepository;
 import com.fptu.capstone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class BookController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ChapterRepository chapterRepository;
 
     @ResponseBody
     @GetMapping("/books")
@@ -55,4 +60,11 @@ public class BookController {
         return userRepository.findById(2).get(0).getBooks();
     }
 
+    @ResponseBody
+    @GetMapping("/chapter")
+    public Page<Chapter> getAllChapterOfBook(@RequestHeader int bookId, @RequestHeader int page, @RequestHeader int pageSize,
+                                             @RequestHeader String sortField, @RequestHeader String sortOrder){
+        Pageable pageable = PageRequest.of(page,pageSize);
+        return chapterRepository.findChapterByBookId(bookId, pageable);
+    }
 }
