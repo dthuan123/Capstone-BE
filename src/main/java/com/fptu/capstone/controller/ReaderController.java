@@ -24,8 +24,9 @@ public class ReaderController {
 
     @ResponseBody
     @GetMapping("message-list")
-    public List<Report> getMessageListByReaderId(@RequestHeader int userId) {
-        return reportRepository.findByUserSenderId(userId);
+    public Page<Report> getMessageListByReaderId(@RequestHeader int page, @RequestHeader int pageSize, @RequestHeader int userId) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return reportRepository.findByUserSenderId(userId, pageable);
     }
 
 }

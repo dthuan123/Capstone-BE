@@ -46,8 +46,9 @@ public class AuthenticationController {
 
     @ResponseBody
     @GetMapping(value="/comments")
-    public Page<ChapterComment> getCommentsByChapter(@RequestHeader int chapterId){
-        Pageable pageable = PageRequest.of(0, 5);
+    public Page<ChapterComment> getCommentsByChapter(@RequestHeader int chapterId, @RequestHeader int page,
+                                                     @RequestHeader int pageSize){
+        Pageable pageable = PageRequest.of(page, pageSize);
         return chapterCommentRepository.findAllCommentsByChapterIdAndParentIdIsNull(pageable, 2);
     }
 }

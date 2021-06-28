@@ -62,8 +62,7 @@ public class BookController {
 
     @ResponseBody
     @GetMapping("/chapter")
-    public Page<Chapter> getAllChapterOfBook(@RequestHeader int bookId, @RequestHeader int page, @RequestHeader int pageSize,
-                                             @RequestHeader String sortField, @RequestHeader String sortOrder){
+    public Page<Chapter> getAllChapterOfBook(@RequestHeader int bookId, @RequestHeader int page, @RequestHeader int pageSize){
         Pageable pageable = PageRequest.of(page,pageSize);
         return chapterRepository.findChapterByBookId(bookId, pageable);
     }

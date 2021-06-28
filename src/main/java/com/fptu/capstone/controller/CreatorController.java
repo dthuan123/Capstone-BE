@@ -38,6 +38,9 @@ public class CreatorController {
     @Autowired
     BookStatusRepository bookStatusRepository;
 
+    @Autowired
+    ChapterCommentRepository chapterCommentRepository;
+
     private static String imageBaseURL = "http://localhost:8000/content/images/books/";
 
 
@@ -176,12 +179,6 @@ public class CreatorController {
 
         return chapterRepository.findChapterByBookId(bookId, pageable);
     }
-//
-//    @ResponseBody
-//    @DeleteMapping(value="get/chapters")
-//    public List<Chapter> deleteChapter(@RequestHeader int chapterId) {
-//        return chapterRepository.delete(chapterId);
-//    }
 
     @ResponseBody
     @GetMapping(value="get/aliases")
@@ -200,4 +197,12 @@ public class CreatorController {
     public List<BookStatus> getBookStatuses() {
         return bookStatusRepository.findAll();
     }
+
+    @ResponseBody
+    @PostMapping(value="create/comment")
+    public ResponseEntity addComment(@RequestBody ChapterComment comment) {
+        chapterCommentRepository.save(comment);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
 }

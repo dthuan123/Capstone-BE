@@ -2,6 +2,7 @@ package com.fptu.capstone.controller;
 
 
 import com.fptu.capstone.entity.Comment;
+import com.fptu.capstone.repository.ChapterRepository;
 import com.fptu.capstone.service.AudioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -12,10 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -27,19 +25,14 @@ public class AudioController {
     @Autowired
     AudioService audioService;
 
+    @Autowired
+    ChapterRepository chapterRepository;
+
     @ResponseBody
     @GetMapping("/audio")
-    public void  getAudio(HttpServletResponse response) {
-//        InputStream inputStream = new ByteArrayInputStream(audioService.getAudio());
-//
-//        InputStreamResource inputStreamResource = new InputStreamResource(inputStream);
-//        HttpHeaders responseHeaders = new HttpHeaders();
-//        responseHeaders.set("Content-Disposition:", "attachment;filename=" + "audio.mp3");
-//        responseHeaders.set("Content-Type:", "audio/mpeg");
-
+    public void  getAudio(@RequestParam int chapterId, @RequestParam boolean female, HttpServletResponse response) {
         try (OutputStream out = new FileOutputStream("output.mp3")) {
-            out.write(audioService.getAudio());
-            //System.out.println("Audio content written to file \"output.mp3\"");
+            out.write(audioService.getAudio(chapterId, female));
             File file = new File("output.mp3");
             response.setContentType("audio/mpeg");
             response.addHeader("Accept-Ranges", "bytes");
@@ -57,17 +50,5 @@ public class AudioController {
             e.printStackTrace();
         }
 
-//        return ResponseEntity.ok()
-//                .headers(responseHeaders)
-//                //.contentLength(file.length())
-//                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-//                .body(inputStreamResource);
-        //return new ResponseEntity(inputStreamResource, HttpStatus.OK);
-    }
-
-    @ResponseBody
-    @GetMapping("/audio/success")
-    public String audioSuccess() {
-        return "OK";
     }
 }

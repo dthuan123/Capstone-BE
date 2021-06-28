@@ -3,6 +3,7 @@ package com.fptu.capstone.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
@@ -25,7 +26,7 @@ public class ChapterComment {
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private ChapterComment parent;
 
     @OneToMany(mappedBy = "parent")
@@ -34,7 +35,7 @@ public class ChapterComment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chapter_id")
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Chapter chapter;
 
     public int getId() {
