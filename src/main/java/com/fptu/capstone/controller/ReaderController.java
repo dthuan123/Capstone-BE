@@ -22,10 +22,10 @@ public class ReaderController {
     @Autowired
     ReportRepository reportRepository;
 
-    @ResponseBody
-    @GetMapping("message-list")
-    public List<Report> getMessageListByReaderId(@RequestHeader int userId) {
-        return reportRepository.findByUserSenderId(2);
-    }
+//    @ResponseBody
+//    @GetMapping("message-list")
+//    public List<Report> getMessageListByReaderId(@RequestHeader int userId) {
+//        return reportRepository.findByUserSenderId(2);
+//    }
 
 }
