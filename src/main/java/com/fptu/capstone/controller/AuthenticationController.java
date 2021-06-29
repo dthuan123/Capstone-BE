@@ -40,8 +40,15 @@ public class AuthenticationController {
     @ResponseBody
     @PostMapping(value="/register")
     public ResponseEntity registerUser(@RequestBody User user){
-        userRepository.save(user);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        List<User> users = userRepository.findAll();
+        for (User userr: users
+             ) {
+            if (!userr.getName().equals(user.getName()) && !userr.getEmail().equals(user.getEmail())) {
+                userRepository.save(user);
+                return ResponseEntity.status(HttpStatus.OK).body(null);
+            }
+        }
+        return null;
     }
 
     @ResponseBody

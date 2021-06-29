@@ -69,21 +69,29 @@ public class BookController {
 
     @ResponseBody
     @GetMapping("/updateLike")
-    public Book updateLike(@RequestHeader int likeCount, @RequestHeader int bookId ) {
-//        User user = userRepository.findById(userId).get(0);
-//        List<Book> likedList = user.getLikedList();
+    public Book updateLike(@RequestHeader int likeCount, @RequestHeader int bookId, @RequestHeader User user ) {
+        List<Book> likedList = user.getLikedList();
+        Book book = bookRepository.findById(bookId);
+        boolean isLiked = false;
 //        //check xem like chua
-//
-//            Book book = bookRepository.findById(bookId);
-//            book.setLikes(likeCount);
-//            //update user;
-//            likedList.add(book);
-//            userRepository.save(user);
-//            return bookRepository.save(book);
-//
-//            return book;
+        for (Book bookliked : likedList
+             ) {
+            if(bookliked.equals(book)){
+                isLiked = true;
+            }
+        }
+            if(isLiked){
+                System.out.println("Ban da like roi");
+            }else {
+                book.setLikes(likeCount);
+                //update user;
+                likedList.add(book);
+                userRepository.save(user);
+                return bookRepository.save(book);
 
-        return null;
+
+            }
+        return book;
     }
 
 }
