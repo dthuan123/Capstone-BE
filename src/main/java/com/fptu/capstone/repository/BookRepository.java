@@ -17,4 +17,6 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     Page<Book> findByCategoriesId(int categoryId, Pageable pageable);
     Page<Book> findALlByCreatorId(int id, Pageable pageable);
     Page<Book> findALlByCreatorIdAndNameContains(int id, String name, Pageable pageable);
+    @Query(value = "update Book set like_count = ?1 where book_id = ?2", nativeQuery = true)
+    Book updateLikeBook(int like_count, int book_id);
 }

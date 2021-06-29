@@ -66,4 +66,11 @@ public class BookController {
         Pageable pageable = PageRequest.of(page,pageSize);
         return chapterRepository.findChapterByBookId(bookId, pageable);
     }
+
+    @ResponseBody
+    @GetMapping("/updateLike")
+    public Book updateLike(@RequestHeader int like_count, @RequestHeader int book_id){
+        return bookRepository.updateLikeBook(like_count, book_id);
+    }
+
 }
