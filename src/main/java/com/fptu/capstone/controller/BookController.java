@@ -56,8 +56,8 @@ public class BookController {
 
     @ResponseBody
     @GetMapping("/user")
-    public List<Book> getUser() {
-        return userRepository.findById(2).get(0).getBooks();
+    public User getUser() {
+        return userRepository.findById(1).get(0);
     }
 
     @ResponseBody
@@ -69,8 +69,21 @@ public class BookController {
 
     @ResponseBody
     @GetMapping("/updateLike")
-    public Book updateLike(@RequestHeader int like_count, @RequestHeader int book_id){
-        return bookRepository.updateLikeBook(like_count, book_id);
+    public Book updateLike(@RequestHeader int likeCount, @RequestHeader int bookId ) {
+//        User user = userRepository.findById(userId).get(0);
+//        List<Book> likedList = user.getLikedList();
+//        //check xem like chua
+//
+//            Book book = bookRepository.findById(bookId);
+//            book.setLikes(likeCount);
+//            //update user;
+//            likedList.add(book);
+//            userRepository.save(user);
+//            return bookRepository.save(book);
+//
+//            return book;
+
+        return null;
     }
 
 }
