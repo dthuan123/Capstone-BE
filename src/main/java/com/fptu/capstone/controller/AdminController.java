@@ -1,13 +1,14 @@
 package com.fptu.capstone.controller;
 
 
-import com.fptu.capstone.entity.Chapter;
+import com.fptu.capstone.entity.Book;
 import com.fptu.capstone.entity.Report;
 import com.fptu.capstone.entity.User;
+import com.fptu.capstone.repository.BookRepository;
 import com.fptu.capstone.repository.ReportRepository;
 import com.fptu.capstone.repository.UserRepository;
+import com.fptu.capstone.service.BookEditService;
 import com.fptu.capstone.service.UserEditService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,14 +21,20 @@ import java.util.List;
 @RestController
 @RequestMapping("admin")
 public class AdminController {
-    @Autowired
-    UserRepository userRepository;
-    ReportRepository reportRepository;
+    final UserRepository userRepository;
+    final ReportRepository reportRepository;
+    final BookRepository bookRepository;
     private final UserEditService userEditService;
+    private final BookEditService bookEditService;
 
-    public AdminController(UserEditService userEditService) {
+    public AdminController(UserRepository userRepository, ReportRepository reportRepository, BookRepository bookRepository, UserEditService userEditService, BookEditService bookEditService) {
         this.userEditService = userEditService;
+        this.userRepository = userRepository;
+        this.reportRepository = reportRepository;
+        this.bookRepository = bookRepository;
+        this.bookEditService = bookEditService;
     }
+
     @ResponseBody
     @GetMapping("user-list")
     public Page<User> getAll(@RequestHeader int page, @RequestHeader int pageSize,
@@ -53,6 +60,7 @@ public class AdminController {
     public boolean approved(@RequestHeader int userid) {
         return userEditService.approved(userid);
     }
+
     @ResponseBody
     @GetMapping(value="user-enabled")
     public boolean enabled(@RequestHeader int userid) {
@@ -60,9 +68,42 @@ public class AdminController {
     }
 
     @ResponseBody
-    @GetMapping("report-all")
-    public List<Report> getAll() {
-        return reportRepository.findAll();
+    @GetMapping("book-listadmin")
+    public Page<Book> getAllBook(@RequestHeader int page, @RequestHeader int pageSize,
+                                 @RequestHeader String sortField, @RequestHeader String sortOrder) {
+        Sort sort = Sort.by(sortField).ascending();
+        if(sortOrder == "des") {
+            sort.descending();
+        }
+
+        Pageable pageable = PageRequest.of(page, pageSize, sort);
+
+        return bookRepository.findAll(pageable);
     }
 
+    @ResponseBody
+    @GetMapping("report-listadmin")
+    public Page<Report> getPage(@RequestHeader int page, @RequestHeader int pageSize,
+                                @RequestHeader String sortField, @RequestHeader String sortOrder) {
+        Sort sort = Sort.by(sortField).ascending();
+        if(sortOrder == "des") {
+            sort.descending();
+        }
+
+        Pageable pageable = PageRequest.of(page, pageSize, sort);
+
+        return reportRepository.findAll(pageable);
+    }
+
+    @ResponseBody
+    @GetMapping(value="book-viewadmin")
+    public List<Book> getBookAdmin(@RequestHeader int userid) {
+        return bookRepository.findById(userid);
+    }
+
+    @ResponseBody
+    @GetMapping(value="book-enabledadmin")
+    public boolean enabledBook(@RequestHeader int userid) {
+        return bookEditService.enabled(userid);
+    }
 }
