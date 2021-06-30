@@ -97,7 +97,7 @@ public class AdminController {
 
     @ResponseBody
     @GetMapping(value="book-viewadmin")
-    public List<Book> getBookAdmin(@RequestHeader int userid) {
+    public Book getBookAdmin(@RequestHeader int userid) {
         return bookRepository.findById(userid);
     }
 
