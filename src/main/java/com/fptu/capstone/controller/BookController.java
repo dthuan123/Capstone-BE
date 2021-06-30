@@ -36,8 +36,15 @@ public class BookController {
 
     @ResponseBody
     @GetMapping("/books")
-    public List<Book> getALlBooks() {
-        return bookRepository.findAll();
+    public List<Book> getTop10NewestBook() {
+        return bookRepository.findTop10NewestBook();
+    }
+
+    @ResponseBody
+    @GetMapping("/all-books")
+    public Page<Book> getAllBook(@RequestHeader int page, @RequestHeader int pageSize){
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return bookRepository.findAll(pageable);
     }
 
     @ResponseBody
@@ -82,7 +89,11 @@ public class BookController {
             }
         }
             if(isLiked){
-                System.out.println("Ban da like roi");
+                //System.out.println("Ban da like roi");
+                book.setLikes(likeCount - 1);
+                likedList.remove(book);
+                userRepository.save(user);
+                bookRepository.save(book);
             }else {
                 book.setLikes(likeCount + 1);
                 //update user;
