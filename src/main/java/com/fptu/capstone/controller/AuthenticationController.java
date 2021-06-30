@@ -41,13 +41,12 @@ public class AuthenticationController {
     @PostMapping(value="/register")
     public ResponseEntity registerUser(@RequestBody User user){
         List<User> users = userRepository.findAll();
-        for (User userr: users
-             ) {
-            if (!userr.getName().equals(user.getName()) && !userr.getEmail().equals(user.getEmail())) {
-                userRepository.save(user);
-                return ResponseEntity.status(HttpStatus.OK).body(null);
-            }
+        User duplicate = userRepository.findByName(user.getName());
+        if(duplicate == null) {
+            userRepository.save(user);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
         }
+
         return null;
     }
 

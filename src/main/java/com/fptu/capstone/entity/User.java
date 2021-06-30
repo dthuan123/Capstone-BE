@@ -53,11 +53,12 @@ public class User {
     @JsonIgnore
     private List<Book> books;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "UserLikeList",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id"))
+    @JsonIgnore
     private List<Book> likedList;
 
     @OneToMany(mappedBy = "userSender")
