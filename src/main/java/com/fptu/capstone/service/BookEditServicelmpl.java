@@ -18,14 +18,14 @@ public class BookEditServicelmpl implements BookEditService{
     @Override
     public boolean enabled(int bookid) {
         try {
-            var user =  bookRepository.findById(bookid);
-            if (user.getEnabled() == false){
-                user.setEnabled(true);
+            var book =  bookRepository.findById(bookid);
+            if (book.getEnabled() == false){
+                book.setEnabled(true);
             }
             else {
-                user.setEnabled(false);
+                book.setEnabled(false);
             }
-            bookRepository.save(user);
+            bookRepository.save(book);
             return true;
         }
         catch (Exception e) {
