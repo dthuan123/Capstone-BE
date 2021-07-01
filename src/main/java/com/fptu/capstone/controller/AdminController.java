@@ -82,8 +82,8 @@ public class AdminController {
     }
 
     @ResponseBody
-    @GetMapping("report-listadmin")
-    public Page<Report> getPage(@RequestHeader int page, @RequestHeader int pageSize,
+    @GetMapping("reportListAdmin")
+    public Page<Report> getPageReport(@RequestHeader int page, @RequestHeader int pageSize,
                                 @RequestHeader String sortField, @RequestHeader String sortOrder) {
         Sort sort = Sort.by(sortField).ascending();
         if(sortOrder == "des") {
@@ -97,13 +97,15 @@ public class AdminController {
 
     @ResponseBody
     @GetMapping(value="book-viewadmin")
-    public Book getBookAdmin(@RequestHeader int userid) {
-        return bookRepository.findById(userid);
+    public Book getBookAdmin(@RequestHeader int bookid) {
+        return bookRepository.findById(bookid);
     }
 
     @ResponseBody
     @GetMapping(value="book-enabledadmin")
-    public boolean enabledBook(@RequestHeader int userid) {
-        return bookEditService.enabled(userid);
+    public boolean enabledBook(@RequestHeader int bookid) {
+        return bookEditService.enabled(bookid
+        );
     }
+
 }
