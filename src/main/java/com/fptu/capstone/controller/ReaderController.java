@@ -26,14 +26,7 @@ public class ReaderController {
 
     @ResponseBody
     @GetMapping("message-list")
-    public Page<Report> getMessageListByReaderId(@RequestHeader int page, @RequestHeader int pageSize, @RequestHeader int userId) {
-        Pageable pageable = PageRequest.of(page, pageSize);
-        return reportRepository.findByUserSenderId(userId, pageable);
-    }
-
-    @ResponseBody
-    @GetMapping("search-message")
-    public Page<Report> searchMessage(@RequestHeader int page, @RequestHeader int pageSize, @RequestHeader int userId,  @RequestHeader String searchKeyword) {
+    public Page<Report> getMessageListByReaderId(@RequestHeader int page, @RequestHeader int pageSize, @RequestHeader int userId, @RequestHeader String searchKeyword) {
         Pageable pageable = PageRequest.of(page, pageSize);
         if(!searchKeyword.equals("")) {
             return reportRepository.findALlByUserSenderIdAndReportContentContains(userId, pageable, searchKeyword);
@@ -41,10 +34,11 @@ public class ReaderController {
         return reportRepository.findByUserSenderId(userId, pageable);
     }
 
+
     @ResponseBody
     @DeleteMapping(value="delete-message")
     public ResponseEntity deleteMessage(@RequestHeader int reportId) {
-        reportRepository.deleteByReportId(reportId);
+        reportRepository.deleteById(reportId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }
