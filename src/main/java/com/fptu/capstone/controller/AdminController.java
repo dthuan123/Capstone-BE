@@ -97,8 +97,13 @@ public class AdminController {
 
     @ResponseBody
     @GetMapping(value="book-viewadmin")
+<<<<<<< HEAD
     public Book getBookAdmin(@RequestHeader int bookid) {
         return bookRepository.findById(bookid);
+=======
+    public Book getBookAdmin(@RequestHeader int userid) {
+        return bookRepository.findById(userid);
+>>>>>>> ec989c83632f01fc45a5c1aa108f15b76bac8c85
     }
 
     @ResponseBody
