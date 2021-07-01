@@ -4,5 +4,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface BookEditService {
-    boolean enabled(int id);
+    boolean enabled(int bookid);
 }

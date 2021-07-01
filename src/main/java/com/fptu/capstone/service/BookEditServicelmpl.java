@@ -16,9 +16,9 @@ public class BookEditServicelmpl implements BookEditService{
 
 
     @Override
-    public boolean enabled(int id) {
+    public boolean enabled(int bookid) {
         try {
-            var user =  bookRepository.findById(id);
+            var user =  bookRepository.findById(bookid);
             if (user.getEnabled() == false){
                 user.setEnabled(true);
             }
