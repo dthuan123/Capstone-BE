@@ -12,7 +12,7 @@ public class Report {
     @Id
     @Column(name = "report_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int reportId;
+    private int id;
 
     @Column(name = "report_content")
     private String reportContent;
@@ -42,12 +42,13 @@ public class Report {
     @JoinColumn(name = "status_id")
     private ReportStatus statusId;
 
-    public int getReportId() {
-        return reportId;
+
+    public int getId() {
+        return id;
     }
 
-    public void setReportId(int reportId) {
-        this.reportId = reportId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getReportContent() {

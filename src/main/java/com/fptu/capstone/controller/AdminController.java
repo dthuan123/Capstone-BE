@@ -96,6 +96,12 @@ public class AdminController {
     }
 
     @ResponseBody
+    @GetMapping(value="report-viewadmin")
+    public Report getReportAdmin(@RequestHeader int reportid) {
+        return reportRepository.findById(reportid);
+    }
+
+    @ResponseBody
     @GetMapping(value="book-viewadmin")
     public Book getBookAdmin(@RequestHeader int bookid) {
         return bookRepository.findById(bookid);
