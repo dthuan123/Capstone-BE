@@ -8,6 +8,7 @@ import com.fptu.capstone.repository.BookRepository;
 import com.fptu.capstone.repository.ReportRepository;
 import com.fptu.capstone.repository.UserRepository;
 import com.fptu.capstone.service.BookEditService;
+import com.fptu.capstone.service.ReportEditService;
 import com.fptu.capstone.service.UserEditService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,13 +27,15 @@ public class AdminController {
     final BookRepository bookRepository;
     private final UserEditService userEditService;
     private final BookEditService bookEditService;
+    private final ReportEditService reportEditService;
 
-    public AdminController(UserRepository userRepository, ReportRepository reportRepository, BookRepository bookRepository, UserEditService userEditService, BookEditService bookEditService) {
+    public AdminController(UserRepository userRepository, ReportRepository reportRepository, BookRepository bookRepository, UserEditService userEditService, BookEditService bookEditService, ReportEditService reportEditService) {
         this.userEditService = userEditService;
         this.userRepository = userRepository;
         this.reportRepository = reportRepository;
         this.bookRepository = bookRepository;
         this.bookEditService = bookEditService;
+        this.reportEditService = reportEditService;
     }
 
     @ResponseBody
@@ -84,14 +87,17 @@ public class AdminController {
     @ResponseBody
     @GetMapping("reportListAdmin")
     public Page<Report> getPageReport(@RequestHeader int page, @RequestHeader int pageSize,
-                                @RequestHeader String sortField, @RequestHeader String sortOrder) {
+                                @RequestHeader String sortField, @RequestHeader String sortOrder, @RequestHeader String searchKeyword) {
         Sort sort = Sort.by(sortField).ascending();
         if(sortOrder == "des") {
             sort.descending();
         }
 
         Pageable pageable = PageRequest.of(page, pageSize, sort);
-
+        if(!searchKeyword.equals("")) {
+            searchKeyword = "%" + searchKeyword + "%";
+            return reportRepository.findByUserSender_Name(searchKeyword,pageable);
+        }
         return reportRepository.findAll(pageable);
     }
 
@@ -99,6 +105,12 @@ public class AdminController {
     @GetMapping(value="report-viewadmin")
     public Report getReportAdmin(@RequestHeader int reportid) {
         return reportRepository.findById(reportid);
+    }
+
+    @ResponseBody
+    @PostMapping(value="report-responseadmin")
+    public boolean responseadmin(@RequestBody Report report) {
+        return reportEditService.response(report.getResponseContent(),report.getId());
     }
 
     @ResponseBody

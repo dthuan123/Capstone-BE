@@ -5,6 +5,7 @@ import com.fptu.capstone.entity.Report;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestHeader;
 
@@ -15,5 +16,6 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
     Report findById(int id);
     List<Report> findAllByUserReceiverId(int id);
     Page<Report> findByUserSenderId(int id, Pageable pageable);
+    Page<Report> findByUserSender_Name(String name, Pageable pageable);
     Page<Report> findALlByUserSenderIdAndReportContentContains(int id, Pageable pageable, String searchKeyword);
 }
