@@ -41,14 +41,16 @@ public class AdminController {
     @ResponseBody
     @GetMapping("user-list")
     public Page<User> getAll(@RequestHeader int page, @RequestHeader int pageSize,
-                             @RequestHeader String sortField, @RequestHeader String sortOrder) {
+                             @RequestHeader String sortField, @RequestHeader String sortOrder, @RequestHeader String searchKeyword) {
         Sort sort = Sort.by(sortField).ascending();
         if(sortOrder == "des") {
             sort.descending();
         }
 
         Pageable pageable = PageRequest.of(page, pageSize, sort);
-
+        if(!searchKeyword.equals("")) {
+            return userRepository.findAllByName(searchKeyword,pageable);
+        }
         return userRepository.findAll(pageable);
     }
 
@@ -95,8 +97,8 @@ public class AdminController {
 
         Pageable pageable = PageRequest.of(page, pageSize, sort);
         if(!searchKeyword.equals("")) {
-            searchKeyword = "%" + searchKeyword + "%";
-            return reportRepository.findByUserSender_Name(searchKeyword,pageable);
+            var Reportlist = reportRepository.findByUserSenderName(searchKeyword,pageable);
+            return Reportlist;
         }
         return reportRepository.findAll(pageable);
     }

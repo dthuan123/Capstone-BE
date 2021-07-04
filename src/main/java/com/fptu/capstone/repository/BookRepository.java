@@ -18,4 +18,7 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     Page<Book> findALlByCreatorId(int id, Pageable pageable);
     Page<Book> findALlByCreatorIdAndNameContains(int id, String name, Pageable pageable);
     Page<Book> findAll(Pageable pageable);
+
+    @Query("SELECT r FROM Book r  WHERE  r.name like %?1%")
+    Page<Book> findAllByName(String name, Pageable pageable);
 }
