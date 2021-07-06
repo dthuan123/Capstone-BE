@@ -57,4 +57,13 @@ public class AuthenticationController {
         Pageable pageable = PageRequest.of(page, pageSize);
         return chapterCommentRepository.findAllCommentsByChapterIdAndParentIdIsNull(pageable, 2);
     }
+
+    @ResponseBody
+    @PostMapping(value = "/changePassword")
+    public User changePassword(@RequestHeader String password, @RequestHeader int userId){
+        User user = (User) userRepository.findById(userId);
+        user.setPassword(password);
+        userRepository.save(user);
+        return user;
+    }
 }

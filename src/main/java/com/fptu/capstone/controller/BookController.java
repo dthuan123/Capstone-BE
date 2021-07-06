@@ -35,9 +35,21 @@ public class BookController {
     private ChapterRepository chapterRepository;
 
     @ResponseBody
-    @GetMapping("/books")
-    public List<Book> getTop10NewestBook() {
+    @GetMapping("/top-10-books")
+    public List<Book> getTop10Book() {
+        return bookRepository.findTop10Book();
+    }
+
+    @ResponseBody
+    @GetMapping("/newest-books")
+    public List<Book> getTop10NewestBook(){
         return bookRepository.findTop10NewestBook();
+    }
+
+    @ResponseBody
+    @GetMapping("/search-book")
+    public List<Book> getBookByContainName(@RequestHeader String searchword){
+        return bookRepository.findBookByContainName(searchword);
     }
 
     @ResponseBody

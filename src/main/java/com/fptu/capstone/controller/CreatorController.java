@@ -27,6 +27,9 @@ public class CreatorController {
     BookRepository bookRepository;
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     ChapterRepository chapterRepository;
 
     @Autowired
@@ -203,6 +206,12 @@ public class CreatorController {
     public ResponseEntity addComment(@RequestBody ChapterComment comment) {
         chapterCommentRepository.save(comment);
         return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @ResponseBody
+    @GetMapping(value="account/seeInfo")
+    public User seeAccountInformation(@RequestHeader int userId){
+        return userRepository.getById(userId);
     }
 
 }
