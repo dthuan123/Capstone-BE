@@ -75,6 +75,13 @@ public class BookController {
     }
 
     @ResponseBody
+    @GetMapping("/list-book-by-creator")
+    public Page<Book> getAllBookByCreatorId(@RequestHeader int creatorId, @RequestHeader int page, @RequestHeader int pageSize){
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return bookRepository.findALlByCreatorId(creatorId, pageable);
+    }
+
+    @ResponseBody
     @GetMapping("/updateLike")
     public Book updateLike(@RequestHeader int likeCount, @RequestHeader int bookId, @RequestHeader int userId ) {
         User user = userRepository.findById(userId).get(0);
