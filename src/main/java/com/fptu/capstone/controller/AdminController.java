@@ -75,14 +75,17 @@ public class AdminController {
     @ResponseBody
     @GetMapping("book-listadmin")
     public Page<Book> getAllBook(@RequestHeader int page, @RequestHeader int pageSize,
-                                 @RequestHeader String sortField, @RequestHeader String sortOrder) {
+                                 @RequestHeader String sortField, @RequestHeader String sortOrder, @RequestHeader String searchKeyword) {
         Sort sort = Sort.by(sortField).ascending();
         if(sortOrder == "des") {
             sort.descending();
         }
 
         Pageable pageable = PageRequest.of(page, pageSize, sort);
-
+        if(!searchKeyword.equals("")) {
+            var Booklist = bookRepository.findAllByName(searchKeyword,pageable);
+            return Booklist;
+        }
         return bookRepository.findAll(pageable);
     }
 
