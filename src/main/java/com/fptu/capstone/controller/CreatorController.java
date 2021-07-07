@@ -107,17 +107,16 @@ public class CreatorController {
 
     @ResponseBody
     @PostMapping(value = "update/avatar")
-    public boolean setAvatar(@RequestHeader int userId, @RequestPart(value = "avatarImage", required = false) MultipartFile avatar){
-        User user = userRepository.getById(userId);
-        User setAvatar = userRepository.save(user);
+    public boolean setAvatar(@RequestPart User user, @RequestPart(value = "avatar", required = false) MultipartFile avatar){
+        User u = userRepository.getById(user.getId());
         try{
-            if(avatar!=null){
+            if(avatar != null){
                 byte[] bytes = avatar.getBytes();
                 String filename = avatar.getOriginalFilename();
                 String extension = filename.substring(filename.lastIndexOf(".")+1);
-                filename = setAvatar.getId() + "." + extension;
-                setAvatar.setAvatarLink(imageBaseURL + filename);
-                userRepository.save(user);
+                filename = u.getId() + "." + extension;
+                u.setAvatarLink(imageBaseURL + filename);
+                userRepository.save(u);
                 BufferedOutputStream bf = new BufferedOutputStream(new FileOutputStream(new File(
                         "src/main/content/images/avatar_images/" + filename
                 )));

@@ -1,5 +1,6 @@
 package com.fptu.capstone.controller;
 
+import com.fptu.capstone.entity.Book;
 import com.fptu.capstone.entity.ChapterComment;
 import com.fptu.capstone.entity.Comment;
 import com.fptu.capstone.entity.User;
@@ -60,10 +61,9 @@ public class AuthenticationController {
 
     @ResponseBody
     @PostMapping(value = "/changePassword")
-    public User changePassword(@RequestHeader String password, @RequestHeader int userId){
-        User user = (User) userRepository.findById(userId);
-        user.setPassword(password);
+    public void changePassword(@RequestPart String password, @RequestPart int userId){
+        User user = userRepository.getById(userId);
+        user.setPassword(password.replace("\"", ""));
         userRepository.save(user);
-        return user;
     }
 }
