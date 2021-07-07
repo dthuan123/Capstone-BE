@@ -117,16 +117,30 @@ public class CreatorController {
                 filename = u.getId() + "." + extension;
                 u.setAvatarLink(imageBaseURL + filename);
                 userRepository.save(u);
-                BufferedOutputStream bf = new BufferedOutputStream(new FileOutputStream(new File(
+                BufferedOutputStream bff = new BufferedOutputStream(new FileOutputStream(new File(
                         "src/main/content/images/avatar_images/" + filename
                 )));
-                bf.write(bytes);
-                bf.close();
+                bff.write(bytes);
+                bff.close();
             }
         }catch(Exception e){
             e.printStackTrace();
         }
         return true;
+    }
+
+    @ResponseBody
+    @GetMapping("/search/user")
+    public List<User> getUserByContainName(@RequestHeader String searchword){
+        List<User> users = userRepository.findUserByNameContains(searchword);
+
+        for(int i = 0; i<users.size(); i++){
+            if(users.get(i).getRole().getId() != 2){
+                System.out.println(users.get(i).getName());
+                users.remove(users.get(i));
+            }
+        }
+        return users;
     }
 
     @ResponseBody

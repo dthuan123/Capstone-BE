@@ -19,6 +19,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     User findByName(String name);
     User save(User user);
     User getById(int id);
+    List<User> findUserByNameContains(String searchword);
 
     @Query("UPDATE User SET password = :password where id = :id")
     User updatePassword(@Param("password") String password, @Param("id") int userId);
