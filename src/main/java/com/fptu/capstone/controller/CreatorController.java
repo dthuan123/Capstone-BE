@@ -106,6 +106,31 @@ public class CreatorController {
     }
 
     @ResponseBody
+    @PostMapping(value = "update/avatar")
+    public boolean setAvatar(@RequestHeader int userId, @RequestPart(value = "avatarImage", required = false) MultipartFile avatar){
+        User user = userRepository.getById(userId);
+        User setAvatar = userRepository.save(user);
+        try{
+            if(avatar!=null){
+                byte[] bytes = avatar.getBytes();
+                String filename = avatar.getOriginalFilename();
+                String extension = filename.substring(filename.lastIndexOf(".")+1);
+                filename = setAvatar.getId() + "." + extension;
+                setAvatar.setAvatarLink(imageBaseURL + filename);
+                userRepository.save(user);
+                BufferedOutputStream bf = new BufferedOutputStream(new FileOutputStream(new File(
+                        "src/main/content/images/avatar_images/" + filename
+                )));
+                bf.write(bytes);
+                bf.close();
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    @ResponseBody
     @PostMapping(value="update/book", consumes = {   "multipart/form-data" })
     public boolean updateBook(@RequestPart("book") Book book, @RequestPart(value = "coverImage", required=false) MultipartFile coverImage) {
         book.setUpdatedDate(new Date());
