@@ -45,6 +45,13 @@ public class User {
     @Column(name = "enabled")
     private Boolean enabled;
 
+    @Column(name = "user_avatar_link")
+    private String avatarLink;
+
+    @Column(name = "user_cover_link")
+    private String coverLink;
+
+
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
@@ -207,5 +214,21 @@ public class User {
 
     public void setAliases(List<Alias> aliases) {
         this.aliases = aliases;
+    }
+
+    public String getAvatarLink() {
+        return avatarLink;
+    }
+
+    public void setAvatarLink(String avatarLink) {
+        this.avatarLink = avatarLink;
+    }
+
+    public String getCoverLink() {
+        return coverLink;
+    }
+
+    public void setCoverLink(String coverLink) {
+        this.coverLink = coverLink;
     }
 }

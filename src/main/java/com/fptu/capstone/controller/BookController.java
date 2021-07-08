@@ -35,9 +35,21 @@ public class BookController {
     private ChapterRepository chapterRepository;
 
     @ResponseBody
-    @GetMapping("/books")
-    public List<Book> getTop10NewestBook() {
+    @GetMapping("/top-10-books")
+    public List<Book> getTop10Book() {
+        return bookRepository.findTop10Book();
+    }
+
+    @ResponseBody
+    @GetMapping("/newest-books")
+    public List<Book> getTop10NewestBook(){
         return bookRepository.findTop10NewestBook();
+    }
+
+    @ResponseBody
+    @GetMapping("/search-book")
+    public List<Book> getBookByContainName(@RequestHeader String searchword){
+        return bookRepository.findBookByNameContains(searchword);
     }
 
     @ResponseBody
@@ -72,6 +84,13 @@ public class BookController {
     public Page<Chapter> getAllChapterOfBook(@RequestHeader int bookId, @RequestHeader int page, @RequestHeader int pageSize){
         Pageable pageable = PageRequest.of(page,pageSize);
         return chapterRepository.findChapterByBookId(bookId, pageable);
+    }
+
+    @ResponseBody
+    @GetMapping("/list-book-by-creator")
+    public Page<Book> getAllBookByCreatorId(@RequestHeader int creatorId, @RequestHeader int page, @RequestHeader int pageSize){
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return bookRepository.findALlByCreatorId(creatorId, pageable);
     }
 
     @ResponseBody
