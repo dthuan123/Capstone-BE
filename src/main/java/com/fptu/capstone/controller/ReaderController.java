@@ -1,6 +1,7 @@
 package com.fptu.capstone.controller;
 
 import com.fptu.capstone.entity.Book;
+import com.fptu.capstone.entity.Chapter;
 import com.fptu.capstone.entity.Report;
 import com.fptu.capstone.repository.BookRepository;
 import com.fptu.capstone.repository.ChapterRepository;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
