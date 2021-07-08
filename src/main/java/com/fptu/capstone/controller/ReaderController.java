@@ -36,11 +36,19 @@ public class ReaderController {
         return reportRepository.findByUserSenderId(userId, pageable);
     }
 
-
     @ResponseBody
     @DeleteMapping(value="delete-message")
     public ResponseEntity deleteMessage(@RequestHeader int reportId) {
         reportRepository.deleteById(reportId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
+
+    @ResponseBody
+    @PostMapping(value="create-report")
+    public ResponseEntity createReport(@RequestBody Report report) {
+        report.setReportedDate(new Date());
+        reportRepository.save(report);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
 }
