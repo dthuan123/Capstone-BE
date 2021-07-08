@@ -1,5 +1,8 @@
 package com.fptu.capstone.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -9,27 +12,27 @@ public class Report {
     @Id
     @Column(name = "report_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int report_id;
+    private int id;
 
     @Column(name = "report_content")
-    private String report_content;
+    private String reportContent;
 
     @Column(name = "reported_date")
-    private Date reported_date;
+    private Date reportedDate;
 
     @Column(name = "response_date")
-    private Date response_date;
+    private Date responseDate;
 
     @Column(name = "response_content")
-    private String response_content;
+    private String responseContent;
 
     @ManyToOne
     @JoinColumn(name = "sender_id")
-    private User user_sender;
+    private User userSender;
 
     @ManyToOne
     @JoinColumn(name = "receiver_id")
-    private User user_receiver;
+    private User userReceiver;
 
     @ManyToOne
     @JoinColumn(name = "book_id")
@@ -37,62 +40,63 @@ public class Report {
 
     @ManyToOne
     @JoinColumn(name = "status_id")
-    private ReportStatus status_id;
+    private ReportStatus statusId;
 
-    public int getReport_id() {
-        return report_id;
+
+    public int getId() {
+        return id;
     }
 
-    public void setReport_id(int report_id) {
-        this.report_id = report_id;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getReport_content() {
-        return report_content;
+    public String getReportContent() {
+        return reportContent;
     }
 
-    public void setReport_content(String report_content) {
-        this.report_content = report_content;
+    public void setReportContent(String reportContent) {
+        this.reportContent = reportContent;
     }
 
-    public Date getReported_date() {
-        return reported_date;
+    public Date getReportedDate() {
+        return reportedDate;
     }
 
-    public void setReported_date(Date reported_date) {
-        this.reported_date = reported_date;
+    public void setReportedDate(Date reportedDate) {
+        this.reportedDate = reportedDate;
     }
 
-    public Date getResponse_date() {
-        return response_date;
+    public Date getResponseDate() {
+        return responseDate;
     }
 
-    public void setResponse_date(Date response_date) {
-        this.response_date = response_date;
+    public void setResponseDate(Date responseDate) {
+        this.responseDate = responseDate;
     }
 
-    public String getResponse_content() {
-        return response_content;
+    public String getResponseContent() {
+        return responseContent;
     }
 
-    public void setResponse_content(String response_content) {
-        this.response_content = response_content;
+    public void setResponseContent(String responseContent) {
+        this.responseContent = responseContent;
     }
 
-    public User getUser_sender() {
-        return user_sender;
+    public User getUserSender() {
+        return userSender;
     }
 
-    public void setUser_sender(User user_sender) {
-        this.user_sender = user_sender;
+    public void setUserSender(User userSender) {
+        this.userSender = userSender;
     }
 
-    public User getUser_receiver() {
-        return user_receiver;
+    public User getUserReceiver() {
+        return userReceiver;
     }
 
-    public void setUser_receiver(User user_receiver) {
-        this.user_receiver = user_receiver;
+    public void setUserReceiver(User userReceiver) {
+        this.userReceiver = userReceiver;
     }
 
     public Book getBook() {
@@ -103,11 +107,11 @@ public class Report {
         this.book = book;
     }
 
-    public ReportStatus getStatus_id() {
-        return status_id;
+    public ReportStatus getStatusId() {
+        return statusId;
     }
 
-    public void setStatus_id(ReportStatus status_id) {
-        this.status_id = status_id;
+    public void setStatusId(ReportStatus statusId) {
+        this.statusId = statusId;
     }
 }

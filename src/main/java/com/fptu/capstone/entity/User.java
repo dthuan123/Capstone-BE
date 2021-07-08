@@ -30,20 +30,27 @@ public class User {
     @Column(name = "user_phone")
     private String phone;
 
-    @Column(name = "user_cmnd")
-    private String cmnd;
+    @Column(name = "user_identity_card")
+    private String identityCard;
 
-    @Column(name = "user_cmnd_front")
-    private String cmndFront;
+    @Column(name = "user_identity_card_front")
+    private String identityCardFront;
 
-    @Column(name = "user_cmnd_back")
-    private String cmndBack;
+    @Column(name = "user_identity_card_back")
+    private String identityCardBack;
 
     @Column(name = "user_image_link")
     private String profileImageLink;
 
     @Column(name = "enabled")
     private Boolean enabled;
+
+    @Column(name = "user_avatar_link")
+    private String avatarLink;
+
+    @Column(name = "user_cover_link")
+    private String coverLink;
+
 
     @ManyToOne
     @JoinColumn(name = "role_id")
@@ -53,18 +60,25 @@ public class User {
     @JsonIgnore
     private List<Book> books;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "UserLikeList",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id"))
-    List<Book> likedList;
+    @JsonIgnore
+    private List<Book> likedList;
 
-    @OneToMany(mappedBy = "user_sender")
-    private List<Report> report_sender;
+    @OneToMany(mappedBy = "userSender")
+    @JsonIgnore
+    private List<Report> sendReport;
 
-    @OneToMany(mappedBy = "user_receiver")
-    private List<Report> report_receiver;
+    @OneToMany(mappedBy = "userReceiver")
+    @JsonIgnore
+    private List<Report> receivedReport;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Alias> aliases;
 
     public int getId() {
         return id;
@@ -114,28 +128,28 @@ public class User {
         this.phone = phone;
     }
 
-    public String getCmnd() {
-        return cmnd;
+    public String getIdentityCard() {
+        return identityCard;
     }
 
-    public void setCmnd(String cmnd) {
-        this.cmnd = cmnd;
+    public void setIdentityCard(String identityCard) {
+        this.identityCard = identityCard;
     }
 
-    public String getCmndFront() {
-        return cmndFront;
+    public String getIdentityCardFront() {
+        return identityCardFront;
     }
 
-    public void setCmndFront(String cmndFront) {
-        this.cmndFront = cmndFront;
+    public void setIdentityCardFront(String identityCardFront) {
+        this.identityCardFront = identityCardFront;
     }
 
-    public String getCmndBack() {
-        return cmndBack;
+    public String getIdentityCardBack() {
+        return identityCardBack;
     }
 
-    public void setCmndBack(String cmndBack) {
-        this.cmndBack = cmndBack;
+    public void setIdentityCardBack(String identityCardBack) {
+        this.identityCardBack = identityCardBack;
     }
 
     public String getProfileImageLink() {
@@ -176,5 +190,45 @@ public class User {
 
     public void setLikedList(List<Book> likedList) {
         this.likedList = likedList;
+    }
+
+    public List<Report> getSendReport() {
+        return sendReport;
+    }
+
+    public void setSendReport(List<Report> sendReport) {
+        this.sendReport = sendReport;
+    }
+
+    public List<Report> getReceivedReport() {
+        return receivedReport;
+    }
+
+    public void setReceivedReport(List<Report> receivedReport) {
+        this.receivedReport = receivedReport;
+    }
+
+    public List<Alias> getAliases() {
+        return aliases;
+    }
+
+    public void setAliases(List<Alias> aliases) {
+        this.aliases = aliases;
+    }
+
+    public String getAvatarLink() {
+        return avatarLink;
+    }
+
+    public void setAvatarLink(String avatarLink) {
+        this.avatarLink = avatarLink;
+    }
+
+    public String getCoverLink() {
+        return coverLink;
+    }
+
+    public void setCoverLink(String coverLink) {
+        this.coverLink = coverLink;
     }
 }

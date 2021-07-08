@@ -1,5 +1,6 @@
 package com.fptu.capstone.repository;
 
+import com.fptu.capstone.entity.Book;
 import com.fptu.capstone.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 

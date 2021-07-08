@@ -2,20 +2,19 @@ package com.fptu.capstone.controller;
 
 import com.fptu.capstone.entity.Book;
 //import com.example.demo_be.entity.Comment;
+import com.fptu.capstone.entity.Chapter;
 import com.fptu.capstone.entity.Comment;
 import com.fptu.capstone.entity.User;
 import com.fptu.capstone.repository.BookRepository;
 //import com.example.demo_be.repository.CommentRepository;
+import com.fptu.capstone.repository.ChapterRepository;
 import com.fptu.capstone.repository.CommentRepository;
 import com.fptu.capstone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,10 +30,39 @@ public class BookController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ChapterRepository chapterRepository;
+
     @ResponseBody
-    @GetMapping("/books")
-    public List<Book> getALlBooks() {
-        return bookRepository.findById(1);
+    @GetMapping("/top-10-books")
+    public List<Book> getTop10Book() {
+        return bookRepository.findTop10Book();
+    }
+
+    @ResponseBody
+    @GetMapping("/newest-books")
+    public List<Book> getTop10NewestBook(){
+        return bookRepository.findTop10NewestBook();
+    }
+
+    @ResponseBody
+    @GetMapping("/search-book")
+    public List<Book> getBookByContainName(@RequestHeader String searchword){
+        return bookRepository.findBookByNameContains(searchword);
+    }
+
+    @ResponseBody
+    @GetMapping("/all-books")
+    public Page<Book> getAllBook(@RequestHeader int page, @RequestHeader int pageSize){
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return bookRepository.findAll(pageable);
+    }
+
+    @ResponseBody
+    @GetMapping("/book-by-id")
+    public Book getBookById(@RequestHeader int bookId){
+        return bookRepository.findById(bookId);
     }
 
     @ResponseBody
@@ -47,8 +75,52 @@ public class BookController {
 
     @ResponseBody
     @GetMapping("/user")
-    public List<Book> getUser() {
-        return userRepository.findById(2).get(0).getBooks();
+    public User getUser() {
+        return userRepository.findById(1).get(0);
+    }
+
+    @ResponseBody
+    @GetMapping("/chapter")
+    public Page<Chapter> getAllChapterOfBook(@RequestHeader int bookId, @RequestHeader int page, @RequestHeader int pageSize){
+        Pageable pageable = PageRequest.of(page,pageSize);
+        return chapterRepository.findChapterByBookId(bookId, pageable);
+    }
+
+    @ResponseBody
+    @GetMapping("/list-book-by-creator")
+    public Page<Book> getAllBookByCreatorId(@RequestHeader int creatorId, @RequestHeader int page, @RequestHeader int pageSize){
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return bookRepository.findALlByCreatorId(creatorId, pageable);
+    }
+
+    @ResponseBody
+    @GetMapping("/updateLike")
+    public Book updateLike(@RequestHeader int likeCount, @RequestHeader int bookId, @RequestHeader int userId ) {
+        User user = userRepository.findById(userId).get(0);
+        List<Book> likedList = user.getLikedList();
+        Book book = bookRepository.findById(bookId);
+        boolean isLiked = false;
+
+        for (Book bookLiked : likedList) {
+            if(bookLiked.getId() == book.getId()){
+                isLiked = true;
+                break;
+            }
+        }
+            if(isLiked){
+                //System.out.println("Ban da like roi");
+                book.setLikes(likeCount - 1);
+                likedList.remove(book);
+                userRepository.save(user);
+                bookRepository.save(book);
+            }else {
+                book.setLikes(likeCount + 1);
+                //update user;
+                likedList.add(book);
+                userRepository.save(user);
+                bookRepository.save(book);
+            }
+        return book;
     }
 
 }

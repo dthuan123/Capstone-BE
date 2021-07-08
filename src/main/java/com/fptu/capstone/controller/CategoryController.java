@@ -1,13 +1,14 @@
 package com.fptu.capstone.controller;
 
+import com.fptu.capstone.entity.Book;
 import com.fptu.capstone.entity.Category;
 import com.fptu.capstone.repository.BookRepository;
 import com.fptu.capstone.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,5 +25,13 @@ public class CategoryController {
     @GetMapping("/category-list")
     public List<Category> listAllCategory(){
         return categoryRepository.findAll();
+    }
+
+    @ResponseBody
+    @GetMapping("/book-list")
+    public Page<Book> listBooks(@RequestHeader int categoryId, @RequestHeader int page, @RequestHeader int pageSize,
+                                @RequestHeader String sortField, @RequestHeader String sortOrder) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return bookRepository.findByCategoriesId(categoryId, pageable);
     }
 }

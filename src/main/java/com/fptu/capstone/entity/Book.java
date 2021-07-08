@@ -39,6 +39,9 @@ public class Book {
     @Column(name = "enabled")
     private Boolean enabled;
 
+    @Column(name = "image_link")
+    private String imageLink;
+
     @ManyToOne
     @JoinColumn(name = "status_id")
     private BookStatus bookStatus;
@@ -63,11 +66,19 @@ public class Book {
     List<User> likedUser;
 
     @OneToMany(mappedBy = "book")
+    @JsonIgnore
     private List<Chapter> chapters;
 
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Report> reports;
+
+    @ManyToOne
+    @JoinColumn(name = "alias_id")
+    private Alias alias;
+
+    public Book() {
+    }
 
     public int getId() {
         return id;
@@ -180,6 +191,30 @@ public class Book {
 
     public void setLikedUser(List<User> likedUser) {
         this.likedUser = likedUser;
+    }
+
+    public List<Chapter> getChapters() {
+        return chapters;
+    }
+
+    public void setChapters(List<Chapter> chapters) {
+        this.chapters = chapters;
+    }
+
+    public Alias getAlias() {
+        return alias;
+    }
+
+    public void setAlias(Alias alias) {
+        this.alias = alias;
+    }
+
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 }
 
