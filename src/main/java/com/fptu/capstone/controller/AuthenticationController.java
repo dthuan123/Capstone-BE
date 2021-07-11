@@ -51,13 +51,13 @@ public class AuthenticationController {
         return null;
     }
 
-    @ResponseBody
-    @GetMapping(value="/comments")
-    public Page<ChapterComment> getCommentsByChapter(@RequestHeader int chapterId, @RequestHeader int page,
-                                                     @RequestHeader int pageSize){
-        Pageable pageable = PageRequest.of(page, pageSize);
-        return chapterCommentRepository.findAllCommentsByChapterIdAndParentIdIsNull(pageable, 2);
-    }
+//    @ResponseBody
+//    @GetMapping(value="/comments")
+//    public Page<ChapterComment> getCommentsByChapter(@RequestHeader int chapterId, @RequestHeader int page,
+//                                                     @RequestHeader int pageSize){
+//        Pageable pageable = PageRequest.of(page, pageSize);
+//        return chapterCommentRepository.findAllCommentsByChapterIdAndParentIdIsNull(pageable, 2);
+//    }
 
     @ResponseBody
     @PostMapping(value = "/changePassword")

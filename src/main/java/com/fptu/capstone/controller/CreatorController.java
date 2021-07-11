@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -45,7 +46,6 @@ public class CreatorController {
     ChapterCommentRepository chapterCommentRepository;
 
     private static String imageBaseURL = "http://localhost:8000/content/images/books/";
-
 
     @ResponseBody
     @GetMapping("get/books")
@@ -114,8 +114,8 @@ public class CreatorController {
                 byte[] bytes = avatar.getBytes();
                 String filename = avatar.getOriginalFilename();
                 String extension = filename.substring(filename.lastIndexOf(".")+1);
-                filename = u.getId() + "." + extension;
-                u.setAvatarLink(imageBaseURL + filename);
+//                filename  += extension;
+                u.setAvatarLink("http://localhost:8000/content/images/avatar_images/" + filename);
                 userRepository.save(u);
                 BufferedOutputStream bff = new BufferedOutputStream(new FileOutputStream(new File(
                         "src/main/content/images/avatar_images/" + filename
@@ -132,14 +132,14 @@ public class CreatorController {
     @ResponseBody
     @GetMapping("/search/user")
     public List<User> getUserByContainName(@RequestHeader String searchword){
-        List<User> users = userRepository.findUserByNameContains(searchword);
-
-        for(int i = 0; i<users.size(); i++){
-            if(users.get(i).getRole().getId() != 2){
-                System.out.println(users.get(i).getName());
-                users.remove(users.get(i));
-            }
-        }
+        List<User> users = userRepository.findUserByRoleIdAndNameContains(2, searchword);
+//
+//        for(int i = 0; i<users.size(); i++){
+//            if(users.get(i).getRole().getId() != 2){
+//                System.out.println(users.get(i).getName());
+//                users.remove(users.get(i));
+//            }
+//        }
         return users;
     }
 
@@ -186,6 +186,9 @@ public class CreatorController {
     @PostMapping(value="create/chapter")
     public ResponseEntity createChapter(@RequestBody Chapter chapter) {
         chapter.setStartedDate(new Date());
+        ChapterStatus status = new ChapterStatus();
+        status.setId(1);
+        chapter.setChapterStatus(status);
         chapterRepository.save(chapter);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
@@ -198,6 +201,15 @@ public class CreatorController {
         updateChapter.setName(chapter.getName());
         updateChapter.setContent(chapter.getContent());
         chapterRepository.save(updateChapter);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+    @ResponseBody
+    @GetMapping(value="publish")
+    public ResponseEntity publishChapter(@RequestHeader Date publishDate, @RequestHeader int chapterId) {
+        Chapter chapter = chapterRepository.findById(chapterId);
+        chapter.setPublishDate(publishDate);
+        chapterRepository.save(chapter);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
@@ -249,7 +261,7 @@ public class CreatorController {
     @ResponseBody
     @GetMapping(value="account/seeInfo")
     public User seeAccountInformation(@RequestHeader int userId){
-        return userRepository.getById(userId);
+        return userRepository.findById(userId).get(0);
     }
 
 }
