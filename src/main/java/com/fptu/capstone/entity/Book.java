@@ -69,9 +69,9 @@ public class Book {
     @JsonIgnore
     private List<Chapter> chapters;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<Report> reports;
+//    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+//    @JsonIgnore
+//    private List<Report> reports;
 
     @ManyToOne
     @JoinColumn(name = "alias_id")
