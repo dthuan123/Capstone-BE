@@ -48,7 +48,7 @@ public class ReaderController {
     public ResponseEntity createReport(@RequestBody Report report) {
         report.setReportedDate(new Date());
         reportRepository.save(report);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ResponseEntity.status(HttpStatus.OK).body(report);
     }
 
 }
