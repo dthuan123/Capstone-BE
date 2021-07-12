@@ -114,8 +114,8 @@ public class CreatorController {
                 byte[] bytes = avatar.getBytes();
                 String filename = avatar.getOriginalFilename();
                 String extension = filename.substring(filename.lastIndexOf(".")+1);
-                filename = u.getId() + "." + extension;
-                u.setAvatarLink(imageBaseURL + filename);
+                //filename = u.getId() + "." + extension;
+                u.setAvatarLink("http://localhost:8000/content/images/avatar_images/" + filename);
                 userRepository.save(u);
                 BufferedOutputStream bff = new BufferedOutputStream(new FileOutputStream(new File(
                         "src/main/content/images/avatar_images/" + filename
@@ -234,8 +234,9 @@ public class CreatorController {
 
     @ResponseBody
     @GetMapping(value="account/seeInfo")
-    public User seeAccountInformation(@RequestHeader int userId){
-        return userRepository.getById(userId);
+    public User seeAccountInformation(@RequestHeader int userId) {
+        User user = userRepository.findById(userId).get(0);
+        return user;
     }
 
 }
