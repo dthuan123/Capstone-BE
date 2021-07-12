@@ -106,30 +106,6 @@ public class CreatorController {
     }
 
     @ResponseBody
-    @PostMapping(value = "update/avatar")
-    public boolean setAvatar(@RequestPart User user, @RequestPart(value = "avatar", required = false) MultipartFile avatar){
-        User u = userRepository.getById(user.getId());
-        try{
-            if(avatar != null){
-                byte[] bytes = avatar.getBytes();
-                String filename = avatar.getOriginalFilename();
-                String extension = filename.substring(filename.lastIndexOf(".")+1);
-                //filename = u.getId() + "." + extension;
-                u.setAvatarLink("http://localhost:8000/content/images/avatar_images/" + filename);
-                userRepository.save(u);
-                BufferedOutputStream bff = new BufferedOutputStream(new FileOutputStream(new File(
-                        "src/main/content/images/avatar_images/" + filename
-                )));
-                bff.write(bytes);
-                bff.close();
-            }
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return true;
-    }
-
-    @ResponseBody
     @PostMapping(value="update/book", consumes = {   "multipart/form-data" })
     public boolean updateBook(@RequestPart("book") Book book, @RequestPart(value = "coverImage", required=false) MultipartFile coverImage) {
         book.setUpdatedDate(new Date());
@@ -230,13 +206,6 @@ public class CreatorController {
     public ResponseEntity addComment(@RequestBody ChapterComment comment) {
         chapterCommentRepository.save(comment);
         return ResponseEntity.status(HttpStatus.OK).body(null);
-    }
-
-    @ResponseBody
-    @GetMapping(value="account/seeInfo")
-    public User seeAccountInformation(@RequestHeader int userId) {
-        User user = userRepository.findById(userId).get(0);
-        return user;
     }
 
 }
