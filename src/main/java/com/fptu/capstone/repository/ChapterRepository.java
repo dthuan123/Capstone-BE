@@ -13,6 +13,7 @@ public interface ChapterRepository extends JpaRepository<Chapter, Integer> {
     Page<Chapter> findChapterByBookId(int id, Pageable pageable);
     Page<Chapter> findALlByBookIdAndNameContains(int id, String name, Pageable pageable);
     Chapter findById(int id);
+    List<Chapter> findByBookIdAndChapterStatusId(int bookId, int statusId);
 
 
 }

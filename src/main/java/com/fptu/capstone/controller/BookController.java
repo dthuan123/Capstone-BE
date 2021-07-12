@@ -10,6 +10,7 @@ import com.fptu.capstone.repository.BookRepository;
 import com.fptu.capstone.repository.ChapterRepository;
 import com.fptu.capstone.repository.CommentRepository;
 import com.fptu.capstone.repository.UserRepository;
+import com.fptu.capstone.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +34,9 @@ public class BookController {
 
     @Autowired
     private ChapterRepository chapterRepository;
+
+    @Autowired
+    private ScheduleService scheduleService;
 
     @ResponseBody
     @GetMapping("/top-10-books")
@@ -66,14 +70,6 @@ public class BookController {
     }
 
     @ResponseBody
-    @GetMapping("/com")
-    public Page<Comment> getAllComments() {
-        Pageable pageable = PageRequest.of(0, 2);
-        return commentRepository.findAllCommentsByBookIdAndParentIdIsNull(pageable, 1);
-        //return commentRepository.findAllCommentsByBookIdAndParentIdIsNull(1);
-    }
-
-    @ResponseBody
     @GetMapping("/user")
     public User getUser() {
         return userRepository.findById(1).get(0);
@@ -83,6 +79,7 @@ public class BookController {
     @GetMapping("/chapter")
     public Page<Chapter> getAllChapterOfBook(@RequestHeader int bookId, @RequestHeader int page, @RequestHeader int pageSize){
         Pageable pageable = PageRequest.of(page,pageSize);
+        scheduleService.publishChapters(bookId);
         return chapterRepository.findChapterByBookId(bookId, pageable);
     }
 

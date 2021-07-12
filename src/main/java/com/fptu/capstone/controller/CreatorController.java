@@ -130,20 +130,6 @@ public class CreatorController {
     }
 
     @ResponseBody
-    @GetMapping("/search/user")
-    public List<User> getUserByContainName(@RequestHeader String searchword){
-        List<User> users = userRepository.findUserByNameContains(searchword);
-
-        for(int i = 0; i<users.size(); i++){
-            if(users.get(i).getRole().getId() != 2){
-                System.out.println(users.get(i).getName());
-                users.remove(users.get(i));
-            }
-        }
-        return users;
-    }
-
-    @ResponseBody
     @PostMapping(value="update/book", consumes = {   "multipart/form-data" })
     public boolean updateBook(@RequestPart("book") Book book, @RequestPart(value = "coverImage", required=false) MultipartFile coverImage) {
         book.setUpdatedDate(new Date());

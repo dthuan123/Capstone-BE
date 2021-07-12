@@ -44,6 +44,7 @@ public class AuthenticationController {
         List<User> users = userRepository.findAll();
         User duplicate = userRepository.findByName(user.getName());
         if(duplicate == null) {
+            user.setAvatarLink("http://localhost:8000/content/images/avatar_images/avatar.jpg");
             userRepository.save(user);
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
@@ -51,13 +52,13 @@ public class AuthenticationController {
         return null;
     }
 
-    @ResponseBody
-    @GetMapping(value="/comments")
-    public Page<ChapterComment> getCommentsByChapter(@RequestHeader int chapterId, @RequestHeader int page,
-                                                     @RequestHeader int pageSize){
-        Pageable pageable = PageRequest.of(page, pageSize);
-        return chapterCommentRepository.findAllCommentsByChapterIdAndParentIdIsNull(pageable, 2);
-    }
+//    @ResponseBody
+//    @GetMapping(value="/comments")
+//    public Page<ChapterComment> getCommentsByChapter(@RequestHeader int chapterId, @RequestHeader int page,
+//                                                     @RequestHeader int pageSize){
+//        Pageable pageable = PageRequest.of(page, pageSize);
+//        return chapterCommentRepository.findAllCommentsByChapterIdAndParentIdIsNull(pageable, 2);
+//    }
 
     @ResponseBody
     @PostMapping(value = "/changePassword")
