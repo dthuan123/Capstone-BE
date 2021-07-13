@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -92,6 +93,17 @@ public class BookController {
         Pageable pageable = PageRequest.of(page,pageSize);
         scheduleService.publishChapters(bookId);
         return chapterRepository.findChapterByBookId(bookId, pageable);
+    }
+
+    @ResponseBody
+    @GetMapping("/get-top-newest-comment-book")
+    public List<Comment> getTopNewestComment(){
+        List<Comment> comments = commentRepository.findAll();
+        List<Comment> commentList = new ArrayList<>();
+        for(int i=0; i<10; i++){
+            commentList.add(comments.get(i));
+        }
+        return commentList;
     }
 
     @ResponseBody
