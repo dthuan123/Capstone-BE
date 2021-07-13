@@ -61,40 +61,16 @@ public class BookController {
     @GetMapping("/all-books")
     public Page<Book> getAllBook(@RequestHeader int page, @RequestHeader int pageSize, @RequestHeader String sort){
         Sort sortField = Sort.by("id");
-        if(sort.equals("a")) {
-            sortField = Sort.by("name");
+        if(sort.equals("newupdate")) {
+            sortField = Sort.by("updatedDate").descending();
+        } else if(sort.equals("date")){
+            sortField = Sort.by("startedDate").descending();
+        } else if(sort.equals("likes")){
+            sortField = Sort.by("likes").descending();
         } else {
-            sortField = Sort.by("startedDate");
+            sortField = Sort.by("name").ascending();
         }
         Pageable pageable = PageRequest.of(page, pageSize, sortField);
-        return bookRepository.findAll(pageable);
-    }
-
-    @ResponseBody
-    @GetMapping("/all-book-sort-by-name")
-    public Page<Book> getAllBookSortByName(@RequestHeader int page, @RequestHeader int pageSize){
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("name"));
-        return bookRepository.findAll(pageable);
-    }
-
-    @ResponseBody
-    @GetMapping("/all-book-sort-by-date-start")
-    public Page<Book> getAllBookSortByDateStart(@RequestHeader int page, @RequestHeader int pageSize){
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("startedDate"));
-        return bookRepository.findAll(pageable);
-    }
-
-    @ResponseBody
-    @GetMapping("/all-book-sort-by-likes")
-    public Page<Book> getAllBookSortByLikeCount(@RequestHeader int page, @RequestHeader int pageSize){
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("likes"));
-        return bookRepository.findAll(pageable);
-    }
-
-    @ResponseBody
-    @GetMapping("/all-book-sort-by-update-date")
-    public Page<Book> getAllBookSortByUpdateDate(@RequestHeader int page, @RequestHeader int pageSize){
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("updatedDate"));
         return bookRepository.findAll(pageable);
     }
 
