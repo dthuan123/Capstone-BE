@@ -1,13 +1,7 @@
 package com.fptu.capstone.controller;
 
-import com.fptu.capstone.entity.Book;
-import com.fptu.capstone.entity.Chapter;
-import com.fptu.capstone.entity.Report;
-import com.fptu.capstone.entity.User;
-import com.fptu.capstone.repository.BookRepository;
-import com.fptu.capstone.repository.ChapterRepository;
-import com.fptu.capstone.repository.ReportRepository;
-import com.fptu.capstone.repository.UserRepository;
+import com.fptu.capstone.entity.*;
+import com.fptu.capstone.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +29,9 @@ public class ReaderController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    ChapterCommentRepository chapterCommentRepository;
+
     @ResponseBody
     @GetMapping("message-list")
     public Page<Report> getMessageListByReaderId(@RequestHeader int page, @RequestHeader int pageSize, @RequestHeader int userId, @RequestHeader String searchKeyword) {
@@ -59,6 +56,14 @@ public class ReaderController {
         reportRepository.save(report);
         return ResponseEntity.status(HttpStatus.OK).body(report);
     }
+
+    @ResponseBody
+    @GetMapping(value="list-comments")
+    public Page<ChapterComment> getAllComments(@RequestHeader int page, @RequestHeader int pageSize, @RequestHeader int chapterId) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return chapterCommentRepository.findAllCommentsByChapterIdAndParentIdIsNull(pageable, chapterId);
+    }
+
     @ResponseBody
     @GetMapping(value="account/seeInfo")
     public User seeAccountInformation(@RequestHeader int userId) {
