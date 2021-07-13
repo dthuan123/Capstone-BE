@@ -21,6 +21,9 @@ public class Comment {
     @Column(name="comment_content")
     private String content;
 
+    @Column(name="startedDate")
+    private String startedDate;
+
     @ManyToOne
     @JoinColumn(name = "parent_id")
     @JsonBackReference
@@ -30,6 +33,11 @@ public class Comment {
     @JsonManagedReference
     @BatchSize(size=2)
     private List<Comment> replies = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
@@ -74,5 +82,13 @@ public class Comment {
 
     public void setParent(Comment parent) {
         this.parent = parent;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
