@@ -45,6 +45,7 @@ public class AuthenticationController {
         User duplicate = userRepository.findByName(user.getName());
         if(duplicate == null) {
             user.setAvatarLink("http://localhost:8000/content/images/avatar_images/avatar.jpg");
+            user.setCoverLink("http://localhost:8000/content/images/cover_images/anhbia.jpg");
             userRepository.save(user);
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
