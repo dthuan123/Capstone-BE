@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -60,6 +61,34 @@ public class BookController {
     @GetMapping("/all-books")
     public Page<Book> getAllBook(@RequestHeader int page, @RequestHeader int pageSize){
         Pageable pageable = PageRequest.of(page, pageSize);
+        return bookRepository.findAll(pageable);
+    }
+
+    @ResponseBody
+    @GetMapping("/all-book-sort-by-name")
+    public Page<Book> getAllBookSortByName(@RequestHeader int page, @RequestHeader int pageSize){
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("name"));
+        return bookRepository.findAll(pageable);
+    }
+
+    @ResponseBody
+    @GetMapping("/all-book-sort-by-date-start")
+    public Page<Book> getAllBookSortByDateStart(@RequestHeader int page, @RequestHeader int pageSize){
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("startedDate"));
+        return bookRepository.findAll(pageable);
+    }
+
+    @ResponseBody
+    @GetMapping("/all-book-sort-by-likes")
+    public Page<Book> getAllBookSortByLikeCount(@RequestHeader int page, @RequestHeader int pageSize){
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("likes"));
+        return bookRepository.findAll(pageable);
+    }
+
+    @ResponseBody
+    @GetMapping("/all-book-sort-by-update-date")
+    public Page<Book> getAllBookSortByUpdateDate(@RequestHeader int page, @RequestHeader int pageSize){
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("updatedDate"));
         return bookRepository.findAll(pageable);
     }
 
