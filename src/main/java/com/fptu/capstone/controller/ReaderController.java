@@ -29,9 +29,6 @@ public class ReaderController {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    ChapterCommentRepository chapterCommentRepository;
-
     @ResponseBody
     @GetMapping("message-list")
     public Page<Report> getMessageListByReaderId(@RequestHeader int page, @RequestHeader int pageSize, @RequestHeader int userId, @RequestHeader String searchKeyword) {
@@ -55,13 +52,6 @@ public class ReaderController {
         report.setReportedDate(new Date());
         reportRepository.save(report);
         return ResponseEntity.status(HttpStatus.OK).body(report);
-    }
-
-    @ResponseBody
-    @GetMapping(value="list-comments")
-    public Page<ChapterComment> getAllComments(@RequestHeader int page, @RequestHeader int pageSize, @RequestHeader int chapterId) {
-        Pageable pageable = PageRequest.of(page, pageSize);
-        return chapterCommentRepository.findAllCommentsByChapterIdAndParentIdIsNull(pageable, chapterId);
     }
 
     @ResponseBody
