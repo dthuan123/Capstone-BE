@@ -120,4 +120,15 @@ public class BookController {
         return book;
     }
 
+    @ResponseBody
+    @GetMapping("/updateRating")
+    public Book updateRating(@RequestHeader int newRating, @RequestHeader int bookId) {
+        Book book = bookRepository.findById(bookId);
+        float overallRating = book.getOverallRating();
+        int totalRating = book.getTotalRating();
+        book.setOverallRating(((overallRating * totalRating) + newRating) / (totalRating + 1));
+        book.setTotalRating(totalRating + 1);
+        return bookRepository.save(book);
+    }
+
 }
