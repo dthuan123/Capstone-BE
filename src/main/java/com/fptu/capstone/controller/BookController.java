@@ -132,17 +132,6 @@ public class BookController {
     }
 
     @ResponseBody
-    @GetMapping("/list-all-comment")
-    public List<Comment> getAllComment(){
-        List<Comment> comments = commentRepository.findAll();
-        List<Comment> commentList = null;
-        for(int i=0; i<10; i++){
-            commentList.add(comments.get(i));
-        }
-        return commentList;
-    }
-
-    @ResponseBody
     @GetMapping("/updateRating")
     public Book updateRating(@RequestHeader int newRating, @RequestHeader int bookId) {
         Book book = bookRepository.findById(bookId);

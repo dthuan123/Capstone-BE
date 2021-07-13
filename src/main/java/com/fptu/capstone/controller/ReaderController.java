@@ -30,7 +30,7 @@ public class ReaderController {
     UserRepository userRepository;
 
     @Autowired
-    ChapterCommentRepository chapterCommentRepository;
+    CommentRepository commentRepository;
 
     @ResponseBody
     @GetMapping("message-list")
@@ -58,10 +58,10 @@ public class ReaderController {
     }
 
     @ResponseBody
-    @GetMapping(value="list-comments")
-    public Page<ChapterComment> getAllComments(@RequestHeader int page, @RequestHeader int pageSize, @RequestHeader int chapterId) {
-        Pageable pageable = PageRequest.of(page, pageSize);
-        return chapterCommentRepository.findAllCommentsByChapterIdAndParentIdIsNull(pageable, chapterId);
+    @PostMapping(value="create/comment")
+    public ResponseEntity addComment(@RequestBody Comment comment) {
+        commentRepository.save(comment);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @ResponseBody
