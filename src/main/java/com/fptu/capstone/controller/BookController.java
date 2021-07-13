@@ -59,8 +59,14 @@ public class BookController {
 
     @ResponseBody
     @GetMapping("/all-books")
-    public Page<Book> getAllBook(@RequestHeader int page, @RequestHeader int pageSize){
-        Pageable pageable = PageRequest.of(page, pageSize);
+    public Page<Book> getAllBook(@RequestHeader int page, @RequestHeader int pageSize, @RequestHeader String sort){
+        Sort sortField = Sort.by("id");
+        if(sort.equals("a")) {
+            sortField = Sort.by("name");
+        } else {
+            sortField = Sort.by("startedDate");
+        }
+        Pageable pageable = PageRequest.of(page, pageSize, sortField);
         return bookRepository.findAll(pageable);
     }
 
