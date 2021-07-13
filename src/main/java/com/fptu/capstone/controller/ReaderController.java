@@ -29,6 +29,9 @@ public class ReaderController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    CommentRepository commentRepository;
+
     @ResponseBody
     @GetMapping("message-list")
     public Page<Report> getMessageListByReaderId(@RequestHeader int page, @RequestHeader int pageSize, @RequestHeader int userId, @RequestHeader String searchKeyword) {
@@ -52,6 +55,13 @@ public class ReaderController {
         report.setReportedDate(new Date());
         reportRepository.save(report);
         return ResponseEntity.status(HttpStatus.OK).body(report);
+    }
+
+    @ResponseBody
+    @PostMapping(value="create/comment")
+    public ResponseEntity addComment(@RequestBody Comment comment) {
+        commentRepository.save(comment);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @ResponseBody
