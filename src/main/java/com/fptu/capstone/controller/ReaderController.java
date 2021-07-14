@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -39,7 +41,7 @@ public class ReaderController {
         if(!searchKeyword.equals("")) {
             return reportRepository.findALlByUserSenderIdAndReportContentContains(userId, pageable, searchKeyword);
         }
-        return reportRepository.findByUserSenderId(userId, pageable);
+        return reportRepository.findByUserSenderIdOrderByReportedDateDesc(userId, pageable);
     }
 
     @ResponseBody
@@ -52,15 +54,20 @@ public class ReaderController {
     @ResponseBody
     @PostMapping(value="create-report")
     public ResponseEntity createReport(@RequestBody Report report) {
+        Date date = new Date();
         report.setReportedDate(new Date());
         reportRepository.save(report);
         return ResponseEntity.status(HttpStatus.OK).body(report);
     }
 
     @ResponseBody
-    @PostMapping(value="create/comment")
+    @PostMapping(value="create-comment")
     public ResponseEntity addComment(@RequestBody Comment comment) {
-        //set date
+        Date date = new Date();
+        String strDateFormat = "yyyy-MM-dd HH:mm:ss";
+        DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
+        String formattedDate= dateFormat.format(date);
+        comment.setStartedDate(formattedDate);
         commentRepository.save(comment);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }

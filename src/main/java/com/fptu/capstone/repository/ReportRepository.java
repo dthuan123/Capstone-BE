@@ -20,4 +20,5 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
     Page<Report> findByUserSenderId(int id, Pageable pageable);
     Page<Report> findByUserSender_Name(String name, Pageable pageable);
     Page<Report> findALlByUserSenderIdAndReportContentContains(int id, Pageable pageable, String searchKeyword);
+    Page<Report> findByUserSenderIdOrderByReportedDateDesc(int id, Pageable pageable);
 }
