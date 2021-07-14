@@ -98,7 +98,10 @@ public class BookController {
         List<Comment> comments = commentRepository.findAllByOrderByStartedDateDesc();
         List<Comment> commentList = new ArrayList<>();
         for(int i=0; i<10; i++){
-            commentList.add(comments.get(i));
+            Comment c = comments.get(i);
+            Book b = c.getBook();
+            c.setBook(b);
+            commentList.add(c);
         }
         return commentList;
     }

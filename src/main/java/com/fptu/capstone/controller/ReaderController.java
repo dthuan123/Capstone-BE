@@ -60,6 +60,7 @@ public class ReaderController {
     @ResponseBody
     @PostMapping(value="create/comment")
     public ResponseEntity addComment(@RequestBody Comment comment) {
+        //set date
         commentRepository.save(comment);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
