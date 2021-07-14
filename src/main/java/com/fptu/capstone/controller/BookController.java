@@ -1,10 +1,7 @@
 package com.fptu.capstone.controller;
 
-import com.fptu.capstone.entity.Book;
+import com.fptu.capstone.entity.*;
 //import com.example.demo_be.entity.Comment;
-import com.fptu.capstone.entity.Chapter;
-import com.fptu.capstone.entity.Comment;
-import com.fptu.capstone.entity.User;
 import com.fptu.capstone.repository.BookRepository;
 //import com.example.demo_be.repository.CommentRepository;
 import com.fptu.capstone.repository.ChapterRepository;
@@ -152,6 +149,13 @@ public class BookController {
         book.setOverallRating(((overallRating * totalRating) + newRating) / (totalRating + 1));
         book.setTotalRating(totalRating + 1);
         return bookRepository.save(book);
+    }
+
+    @ResponseBody
+    @GetMapping("/list-comments")
+    public Page<Comment> getAllComments(@RequestHeader int page, @RequestHeader int pageSize, @RequestHeader int bookId) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return commentRepository.findAllCommentsByBookIdAndParentIdIsNull(pageable, bookId);
     }
 
 }
