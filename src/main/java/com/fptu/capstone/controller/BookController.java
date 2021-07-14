@@ -98,7 +98,7 @@ public class BookController {
     @ResponseBody
     @GetMapping("/get-top-newest-comment-book")
     public List<Comment> getTopNewestComment(){
-        List<Comment> comments = commentRepository.findAll();
+        List<Comment> comments = commentRepository.findAllByOrderByStartedDateDesc();
         List<Comment> commentList = new ArrayList<>();
         for(int i=0; i<10; i++){
             commentList.add(comments.get(i));
