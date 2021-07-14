@@ -16,21 +16,21 @@ public class BookEditServicelmpl implements BookEditService{
 
 
     @Override
-    public boolean enabled(int bookid) {
-        try {
-            var book =  bookRepository.findById(bookid);
-            if (book.getEnabled() == false){
-                book.setEnabled(true);
-            }
-            else {
-                book.setEnabled(false);
-            }
-            bookRepository.save(book);
-            return true;
-        }
-        catch (Exception e) {
-            System.out.println("lỗi");
-        }
+    public boolean enabled(int id) {
+//        try {
+//            var user =  bookRepository.findById(id).get(0);
+//            if (user.getEnabled() == false){
+//                user.setEnabled(true);
+//            }
+//            else {
+//                user.setEnabled(false);
+//            }
+//            bookRepository.save(user);
+//            return true;
+//        }
+//        catch (Exception e) {
+//            System.out.println("lỗi");
+//        }
         return false;
     }
 }

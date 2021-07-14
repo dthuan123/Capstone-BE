@@ -1,21 +1,21 @@
 package com.fptu.capstone.controller;
 
-import com.fptu.capstone.entity.Book;
+import com.fptu.capstone.entity.*;
 //import com.example.demo_be.entity.Comment;
-import com.fptu.capstone.entity.Chapter;
-import com.fptu.capstone.entity.Comment;
-import com.fptu.capstone.entity.User;
 import com.fptu.capstone.repository.BookRepository;
 //import com.example.demo_be.repository.CommentRepository;
 import com.fptu.capstone.repository.ChapterRepository;
 import com.fptu.capstone.repository.CommentRepository;
 import com.fptu.capstone.repository.UserRepository;
+import com.fptu.capstone.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -33,6 +33,9 @@ public class BookController {
 
     @Autowired
     private ChapterRepository chapterRepository;
+
+    @Autowired
+    private ScheduleService scheduleService;
 
     @ResponseBody
     @GetMapping("/top-10-books")
@@ -54,8 +57,18 @@ public class BookController {
 
     @ResponseBody
     @GetMapping("/all-books")
-    public Page<Book> getAllBook(@RequestHeader int page, @RequestHeader int pageSize){
-        Pageable pageable = PageRequest.of(page, pageSize);
+    public Page<Book> getAllBook(@RequestHeader int page, @RequestHeader int pageSize, @RequestHeader String sort){
+        Sort sortField = Sort.by("id");
+        if(sort.equals("newupdate")) {
+            sortField = Sort.by("updatedDate").descending();
+        } else if(sort.equals("date")){
+            sortField = Sort.by("startedDate").descending();
+        } else if(sort.equals("likes")){
+            sortField = Sort.by("likes").descending();
+        } else {
+            sortField = Sort.by("name").ascending();
+        }
+        Pageable pageable = PageRequest.of(page, pageSize, sortField);
         return bookRepository.findAll(pageable);
     }
 
@@ -63,14 +76,6 @@ public class BookController {
     @GetMapping("/book-by-id")
     public Book getBookById(@RequestHeader int bookId){
         return bookRepository.findById(bookId);
-    }
-
-    @ResponseBody
-    @GetMapping("/com")
-    public Page<Comment> getAllComments() {
-        Pageable pageable = PageRequest.of(0, 2);
-        return commentRepository.findAllCommentsByBookIdAndParentIdIsNull(pageable, 1);
-        //return commentRepository.findAllCommentsByBookIdAndParentIdIsNull(1);
     }
 
     @ResponseBody
@@ -83,8 +88,24 @@ public class BookController {
     @GetMapping("/chapter")
     public Page<Chapter> getAllChapterOfBook(@RequestHeader int bookId, @RequestHeader int page, @RequestHeader int pageSize){
         Pageable pageable = PageRequest.of(page,pageSize);
+        scheduleService.publishChapters(bookId);
         return chapterRepository.findChapterByBookId(bookId, pageable);
     }
+
+    @ResponseBody
+    @GetMapping("/get-top-newest-comment-book")
+    public List<Comment> getTopNewestComment(){
+        List<Comment> comments = commentRepository.findAllByOrderByStartedDateDesc();
+        List<Comment> commentList = new ArrayList<>();
+        for(int i=0; i<10; i++){
+            Comment c = comments.get(i);
+            Book b = c.getBook();
+            c.setBook(b);
+            commentList.add(c);
+        }
+        return commentList;
+    }
+
 
     @ResponseBody
     @GetMapping("/list-book-by-creator")
@@ -121,6 +142,24 @@ public class BookController {
                 bookRepository.save(book);
             }
         return book;
+    }
+
+    @ResponseBody
+    @GetMapping("/updateRating")
+    public Book updateRating(@RequestHeader int newRating, @RequestHeader int bookId) {
+        Book book = bookRepository.findById(bookId);
+        float overallRating = book.getOverallRating();
+        int totalRating = book.getTotalRating();
+        book.setOverallRating(((overallRating * totalRating) + newRating) / (totalRating + 1));
+        book.setTotalRating(totalRating + 1);
+        return bookRepository.save(book);
+    }
+
+    @ResponseBody
+    @GetMapping("/list-comments")
+    public Page<Comment> getAllComments(@RequestHeader int page, @RequestHeader int pageSize, @RequestHeader int bookId) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return commentRepository.findAllCommentsByBookIdAndParentIdIsNull(pageable, bookId);
     }
 
 }

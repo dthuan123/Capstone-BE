@@ -3,6 +3,7 @@ package com.fptu.capstone.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
@@ -21,19 +22,24 @@ public class Comment {
     @Column(name="comment_content")
     private String content;
 
+    @Column(name="startedDate")
+    private String startedDate;
+
     @ManyToOne
     @JoinColumn(name = "parent_id")
-    @JsonBackReference
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Comment parent;
 
     @OneToMany(mappedBy = "parent")
-    @JsonManagedReference
     @BatchSize(size=2)
     private List<Comment> replies = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id")
-    @JsonIgnore
     private Book book;
 
     public int getId() {
@@ -74,5 +80,21 @@ public class Comment {
 
     public void setParent(Comment parent) {
         this.parent = parent;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getStartedDate() {
+        return startedDate;
+    }
+
+    public void setStartedDate(String startedDate) {
+        this.startedDate = startedDate;
     }
 }

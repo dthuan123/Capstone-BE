@@ -114,4 +114,6 @@ public class Report {
     public void setStatusId(ReportStatus statusId) {
         this.statusId = statusId;
     }
+
+
 }
