@@ -3,6 +3,7 @@ package com.fptu.capstone.controller;
 
 import com.fptu.capstone.entity.Book;
 import com.fptu.capstone.entity.Report;
+import com.fptu.capstone.entity.SearchBook;
 import com.fptu.capstone.entity.User;
 import com.fptu.capstone.repository.BookRepository;
 import com.fptu.capstone.repository.ReportRepository;
@@ -39,17 +40,16 @@ public class AdminController {
     }
 
     @ResponseBody
-    @GetMapping("user-list")
-    public Page<User> getAll(@RequestHeader int page, @RequestHeader int pageSize,
-                             @RequestHeader String sortField, @RequestHeader String sortOrder, @RequestHeader String searchKeyword) {
-        Sort sort = Sort.by(sortField).ascending();
-        if(sortOrder == "des") {
+    @PostMapping("user-list")
+    public Page<User> getAll(@RequestBody SearchBook search) {
+        Sort sort = Sort.by(search.getSortField()).ascending();
+        if(search.getSortOrder() == "des") {
             sort.descending();
         }
 
-        Pageable pageable = PageRequest.of(page, pageSize, sort);
-        if(!searchKeyword.equals("")) {
-            return userRepository.findAllByName(searchKeyword,pageable);
+        Pageable pageable = PageRequest.of(search.getPage(), search.getPageSize(), sort);
+        if(!search.getSearchKeyword().equals("")) {
+            return userRepository.findAllByName(search.getSearchKeyword(),pageable);
         }
         return userRepository.findAll(pageable);
     }
@@ -73,34 +73,32 @@ public class AdminController {
     }
 
     @ResponseBody
-    @GetMapping("book-listadmin")
-    public Page<Book> getAllBook(@RequestHeader int page, @RequestHeader int pageSize,
-                                 @RequestHeader String sortField, @RequestHeader String sortOrder, @RequestHeader String searchKeyword) {
-        Sort sort = Sort.by(sortField).ascending();
-        if(sortOrder == "des") {
+    @PostMapping("book-listadmin")
+    public Page<Book> getAllBook(@RequestBody SearchBook search) {
+        Sort sort = Sort.by(search.getSortField()).ascending();
+        if(search.getSortOrder() == "des") {
             sort.descending();
         }
 
-        Pageable pageable = PageRequest.of(page, pageSize, sort);
-        if(!searchKeyword.equals("")) {
-            var Booklist = bookRepository.findAllByName(searchKeyword,pageable);
+        Pageable pageable = PageRequest.of(search.getPage(), search.getPageSize(), sort);
+        if(!search.getSearchKeyword().equals("")) {
+            var Booklist = bookRepository.findAllByName(search.getSearchKeyword(),pageable);
             return Booklist;
         }
         return bookRepository.findAll(pageable);
     }
 
     @ResponseBody
-    @GetMapping("reportListAdmin")
-    public Page<Report> getPageReport(@RequestHeader int page, @RequestHeader int pageSize,
-                                @RequestHeader String sortField, @RequestHeader String sortOrder, @RequestHeader String searchKeyword) {
-        Sort sort = Sort.by(sortField).ascending();
-        if(sortOrder == "des") {
+    @PostMapping("reportListAdmin")
+    public Page<Report> getPageReport(@RequestBody SearchBook search) {
+        Sort sort = Sort.by(search.getSortField()).ascending();
+        if(search.getSortOrder() == "des") {
             sort.descending();
         }
 
-        Pageable pageable = PageRequest.of(page, pageSize, sort);
-        if(!searchKeyword.equals("")) {
-            var Reportlist = reportRepository.findByUserSenderName(searchKeyword,pageable);
+        Pageable pageable = PageRequest.of(search.getPage(), search.getPageSize(), sort);
+        if(!search.getSearchKeyword().equals("")) {
+            var Reportlist = reportRepository.findByUserSenderName(search.getSearchKeyword(),pageable);
             return Reportlist;
         }
         return reportRepository.findAll(pageable);
