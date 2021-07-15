@@ -27,6 +27,9 @@ public class CreatorController {
     BookRepository bookRepository;
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     ChapterRepository chapterRepository;
 
     @Autowired

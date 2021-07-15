@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -17,5 +18,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findById(int id);
     User findByName(String name);
     User save(User user);
-    User getById(int id);
+    List<User> findUserByRoleIdAndNameContains(int role, String searchword);
+
+    @Query("UPDATE User SET password = :password where id = :id")
+    User updatePassword(@Param("password") String password, @Param("id") int userId);
 }

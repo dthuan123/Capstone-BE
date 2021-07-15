@@ -18,5 +18,7 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
     @Query("SELECT r FROM Report r JOIN r.userSender s WHERE  r.userSender.name like %?1%")
     Page<Report> findByUserSenderName(String name, Pageable pageable);
     Page<Report> findByUserSenderId(int id, Pageable pageable);
+    Page<Report> findByUserSender_Name(String name, Pageable pageable);
     Page<Report> findALlByUserSenderIdAndReportContentContains(int id, Pageable pageable, String searchKeyword);
+    Page<Report> findByUserSenderIdOrderByReportedDateDesc(int id, Pageable pageable);
 }

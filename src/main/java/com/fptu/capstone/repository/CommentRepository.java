@@ -11,5 +11,6 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
     List<Comment> findAllCommentsByBookIdAndParentIdIsNull(int id);
     List<Comment> findAll();
     Page<Comment> findAllCommentsByBookIdAndParentIdIsNull(Pageable pageable, int id);
+    List<Comment> findAllByOrderByStartedDateDesc();
 
 }

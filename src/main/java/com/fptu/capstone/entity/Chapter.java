@@ -1,5 +1,7 @@
 package com.fptu.capstone.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -24,9 +26,20 @@ public class Chapter {
     @Column(name = "updated_date")
     private Date updatedDate;
 
+    @Column(name = "to_be_published_date")
+    private Date publishDate;
+
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private ChapterStatus chapterStatus;
+
     @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book;
+
+    @OneToMany(mappedBy = "chapter", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<ChapterComment> comments;
 
     public int getId() {
         return id;
@@ -74,5 +87,29 @@ public class Chapter {
 
     public void setBook(Book book) {
         this.book = book;
+    }
+
+    public List<ChapterComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<ChapterComment> comments) {
+        this.comments = comments;
+    }
+
+    public ChapterStatus getChapterStatus() {
+        return chapterStatus;
+    }
+
+    public void setChapterStatus(ChapterStatus chapterStatus) {
+        this.chapterStatus = chapterStatus;
+    }
+
+    public Date getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(Date publishDate) {
+        this.publishDate = publishDate;
     }
 }

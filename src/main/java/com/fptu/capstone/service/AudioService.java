@@ -17,6 +17,10 @@ import com.google.protobuf.ByteString;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 @Service
@@ -28,14 +32,6 @@ public class AudioService {
     public byte[] getAudio(int chapterId, boolean female) {
         // Instantiates a client
         try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
-            // Set the text input to be synthesized
-            Chapter chapter = chapterRepository.findById(chapterId);
-            String text = chapter.getContent();
-            text = text.replaceAll("\\<.*?>","");
-            //String text = "Khi một lá thư được gởi đến cho cậu bé Harry Potter bình thường và bất hạnh, cậu khám phá ra một bí mật đã được che giấu suốt cả một thập kỉ. Cha mẹ cậu chính là phù thủy và cả hai đã bị lời nguyền của Chúa tể Hắc ám giết hại khi Harry mới chỉ là một đứa trẻ, và bằng cách nào đó, cậu đã giữ được mạng sống của mình. Thoát khỏi những người giám hộ Muggle không thể chịu đựng nổi để nhập học vào trường Hogwarts, một trường đào tạo phù thủy với những bóng ma và phép thuật, Harry tình cờ dấn thân vào một cuộc phiêu lưu đầy gai góc khi cậu phát hiện ra một con chó ba đầu đang canh giữ một căn phòng trên tầng ba. Rồi Harry nghe nói đến một viên đá bị mất tích sở hữu những sức mạnh lạ kì, rất quí giá, vô cùng nguy hiểm, mà cũng có thể là mang cả hai đặc điểm trên.";
-            String ssml = textToSsml(text);
-            SynthesisInput input = SynthesisInput.newBuilder().setSsml(ssml).build();
-
             VoiceSelectionParams voice =
                     VoiceSelectionParams.newBuilder()
                             .setLanguageCode("vi-VN")
@@ -48,23 +44,49 @@ public class AudioService {
                                 .setSsmlGender(SsmlVoiceGender.MALE)
                                 .build();
             }
-            // Select the type of audio file you want returned
-            AudioConfig audioConfig =
-                    AudioConfig.newBuilder().setAudioEncoding(AudioEncoding.MP3).build();
 
-            // Perform the text-to-speech request on the text input with the selected voice parameters and
-            // audio file type
-            SynthesizeSpeechResponse response =
-                    textToSpeechClient.synthesizeSpeech(input, voice, audioConfig);
+            // Set the text input to be synthesized
+            Chapter chapter = chapterRepository.findById(chapterId);
+            String text = chapter.getContent();
+            text = text.replaceAll("\\<.*?>","");
+            int part = text.length() / 2500;
+            if(text.length() % 2500 != 0) {
+                part++;
+            }
+            List<byte[]> list = new ArrayList();
+            for(int i = 0, count = 1; count <= part; i += 2500, count++ ) {
+                String textPart = "";
+                if(count == part) {
+                    textPart = text.substring(i, text.length());
+                } else {
+                    textPart = text.substring(i, i + 2500);
+                }
 
-            // Get the audio contents from the response
-            ByteString audioContents = response.getAudioContent();
+                String ssml = textToSsml(textPart);
+                SynthesisInput input = SynthesisInput.newBuilder().setSsml(ssml).build();
+                AudioConfig audioConfig =
+                        AudioConfig.newBuilder().setAudioEncoding(AudioEncoding.MP3).build();
 
-            // Write the response to the output file.
-            try (OutputStream out = new FileOutputStream("output.mp3")) {
-                //out.write(audioContents.toByteArray());
-                //System.out.println("Audio content written to file \"output.mp3\"");
-                return audioContents.toByteArray();
+                SynthesizeSpeechResponse response =
+                        textToSpeechClient.synthesizeSpeech(input, voice, audioConfig);
+                ByteString audioContents = response.getAudioContent();
+                list.add(audioContents.toByteArray());
+                System.out.println("processing" + i);
+            }
+
+            int byteLength = 0;
+
+            for(byte[] arr: list) {
+                byteLength += arr.length;
+            }
+            byte[] allByteArray = new byte[byteLength];
+            ByteBuffer target = ByteBuffer.wrap(allByteArray);
+            for(byte[] arr: list) {
+                target.put(arr);
+            }
+
+            try {
+                return target.array();
             } catch (Exception e) {
                 e.printStackTrace();
             }
