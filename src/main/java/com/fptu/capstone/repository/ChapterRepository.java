@@ -15,5 +15,6 @@ public interface ChapterRepository extends JpaRepository<Chapter, Integer> {
     Chapter findById(int id);
     List<Chapter> findByBookIdAndChapterStatusId(int bookId, int statusId);
 
-
+    @Query(value = "select * from Chapter c inner join UserBookHistory b on c.chapter_id = b.chapter_id where b.user_id = ?1", nativeQuery = true)
+    Page<Chapter> findHistoryList(int userId, Pageable pageable);
 }

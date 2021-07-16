@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.net.URLDecoder;
 import java.util.Date;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class CreatorController {
     public Page<Book> getBookListByCreator(@RequestHeader int creatorId, @RequestHeader String searchKeyword,
                                            @RequestHeader int page, @RequestHeader int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
-
+        searchKeyword = URLDecoder.decode(searchKeyword);
         if(!searchKeyword.equals("")) {
             return bookRepository.findALlByCreatorIdAndNameContains(creatorId, searchKeyword, pageable);
         }
@@ -175,12 +176,21 @@ public class CreatorController {
     public Page<Chapter> getChapter(@RequestHeader int bookId, @RequestHeader String searchKeyword,
                                     @RequestHeader int page, @RequestHeader int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
-
+        searchKeyword = URLDecoder.decode(searchKeyword);
         if(!searchKeyword.equals("")) {
             return chapterRepository.findALlByBookIdAndNameContains(bookId, searchKeyword, pageable);
         }
 
         return chapterRepository.findChapterByBookId(bookId, pageable);
+    }
+
+    @ResponseBody
+    @GetMapping(value="publish")
+    public ResponseEntity publishChapter(@RequestHeader Date publishDate, @RequestHeader int chapterId) {
+        Chapter chapter = chapterRepository.findById(chapterId);
+        chapter.setPublishDate(publishDate);
+        chapterRepository.save(chapter);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @ResponseBody
@@ -201,11 +211,5 @@ public class CreatorController {
         return bookStatusRepository.findAll();
     }
 
-    @ResponseBody
-    @PostMapping(value="create/comment")
-    public ResponseEntity addComment(@RequestBody ChapterComment comment) {
-        chapterCommentRepository.save(comment);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
-    }
 
 }
