@@ -51,7 +51,6 @@ public class User {
     @Column(name = "user_cover_link")
     private String coverLink;
 
-
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
@@ -67,6 +66,14 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "book_id"))
     @JsonIgnore
     private List<Book> likedList;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "UserBookHistory",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "chapter_id"))
+    @JsonIgnore
+    private List<Chapter> historyList;
 
     @OneToMany(mappedBy = "userSender")
     @JsonIgnore
@@ -232,5 +239,11 @@ public class User {
         this.coverLink = coverLink;
     }
 
+    public List<Chapter> getHistoryList() {
+        return historyList;
+    }
 
+    public void setHistoryList(List<Chapter> historyList) {
+        this.historyList = historyList;
+    }
 }
