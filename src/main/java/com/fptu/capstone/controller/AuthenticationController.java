@@ -7,6 +7,7 @@ import com.fptu.capstone.entity.User;
 import com.fptu.capstone.repository.ChapterCommentRepository;
 import com.fptu.capstone.repository.CommentRepository;
 import com.fptu.capstone.repository.UserRepository;
+import com.fptu.capstone.service.MD5Library;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,10 +28,14 @@ public class AuthenticationController {
     @Autowired
     private ChapterCommentRepository chapterCommentRepository;
 
+    @Autowired
+    private MD5Library md5Library;
+
     @ResponseBody
     @PostMapping("/login")
     public User login(@RequestBody User user) {
-        User userDB = userRepository.findByNameAndPassword(user.getName(), user.getPassword());
+        String md5Password = md5Library.md5(user.getPassword());
+        User userDB = userRepository.findByNameAndPassword(user.getName(), md5Password);
         if(userDB != null) {
             userDB.setPassword(null);
             return userDB;
@@ -43,9 +48,11 @@ public class AuthenticationController {
     public ResponseEntity registerUser(@RequestBody User user){
         List<User> users = userRepository.findAll();
         User duplicate = userRepository.findByName(user.getName());
+        String md5Password = md5Library.md5(user.getPassword());
         if(duplicate == null) {
             user.setAvatarLink("http://localhost:8000/content/images/avatar_images/avatar.jpg");
             user.setCoverLink("http://localhost:8000/content/images/cover_images/anhbia.jpg");
+            user.setPassword(md5Password);
             userRepository.save(user);
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
@@ -63,9 +70,11 @@ public class AuthenticationController {
 
     @ResponseBody
     @PostMapping(value = "/changePassword")
-    public void changePassword(@RequestPart String password, @RequestPart int userId){
+    public void changePassword(@RequestPart String password, @RequestPart int userId, @RequestPart String oldPassword){
+        String md5OldPassword = md5Library.md5(oldPassword);
         User user = userRepository.getById(userId);
+        if(md5OldPassword.equals(user.getPassword())){
         user.setPassword(password.replace("\"", ""));
-        userRepository.save(user);
+        userRepository.save(user);}
     }
 }
