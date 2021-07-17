@@ -70,11 +70,15 @@ public class AuthenticationController {
 
     @ResponseBody
     @PostMapping(value = "/changePassword")
-    public void changePassword(@RequestPart String password, @RequestPart int userId, @RequestPart String oldPassword){
+    public ResponseEntity changePassword(@RequestPart String password, @RequestPart int userId, @RequestPart String oldPassword){
         String md5OldPassword = md5Library.md5(oldPassword);
         User user = userRepository.getById(userId);
         if(md5OldPassword.equals(user.getPassword())){
-        user.setPassword(password.replace("\"", ""));
-        userRepository.save(user);}
+            user.setPassword(password.replace("\"", ""));
+            userRepository.save(user);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Old password is not correct.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }
