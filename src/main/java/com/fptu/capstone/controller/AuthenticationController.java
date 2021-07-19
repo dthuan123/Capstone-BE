@@ -46,7 +46,7 @@ public class AuthenticationController {
     @ResponseBody
     @PostMapping(value="/register")
     public ResponseEntity registerUser(@RequestBody User user){
-        List<User> users = userRepository.findAll();
+        //List<User> users = userRepository.findAll();
         User duplicate = userRepository.findByName(user.getName());
         String md5Password = md5Library.md5(user.getPassword());
         if(duplicate == null) {
@@ -71,10 +71,10 @@ public class AuthenticationController {
     @ResponseBody
     @PostMapping(value = "/changePassword")
     public ResponseEntity changePassword(@RequestPart String password, @RequestPart int userId, @RequestPart String oldPassword){
-        String md5OldPassword = md5Library.md5(oldPassword);
+        String md5OldPassword = md5Library.md5(oldPassword.replace("\"",""));
         User user = userRepository.getById(userId);
         if(md5OldPassword.equals(user.getPassword())){
-            user.setPassword(password.replace("\"", ""));
+            user.setPassword(md5Library.md5(password.replace("\"", "")));
             userRepository.save(user);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Old password is not correct.");
