@@ -26,6 +26,9 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 //    @Query(value = "select r from Book r where r.name like '%:searchword%'")
     List<Book> findBookByNameContains(String searchword);
 
+    //    @Query(value = "select r from Book r where r.name like '%:searchword%'")
+    List<Book> findBookByEnabledAndNameContains(boolean enabled, String searchword);
+
     @Query("SELECT r FROM Book r  WHERE  r.name like %?1%")
     Page<Book> findAllByName(String name, Pageable pageable);
 
