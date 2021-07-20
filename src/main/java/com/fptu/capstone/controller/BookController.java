@@ -70,7 +70,7 @@ public class BookController {
             sortField = Sort.by("name").ascending();
         }
         Pageable pageable = PageRequest.of(page, pageSize, sortField);
-        return bookRepository.findAll(pageable);
+        return bookRepository.findBookByEnabled(true, pageable);
     }
 
     @ResponseBody
@@ -112,7 +112,7 @@ public class BookController {
     @GetMapping("/list-book-by-creator")
     public Page<Book> getAllBookByCreatorId(@RequestHeader int creatorId, @RequestHeader int page, @RequestHeader int pageSize){
         Pageable pageable = PageRequest.of(page, pageSize);
-        return bookRepository.findALlByCreatorId(creatorId, pageable);
+        return bookRepository.findBookByEnabledAndCategoriesId(true, creatorId, pageable);
     }
 
     @ResponseBody
