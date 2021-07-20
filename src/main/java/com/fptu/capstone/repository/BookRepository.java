@@ -12,10 +12,10 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface BookRepository extends JpaRepository<Book, Integer> {
-    @Query(value = "select top(18) id, status_id, book_name, overall_rating, total_rating, updated_date, description, like_count, enabled,started_date, alias_id, creator_id, image_link from Book order by like_count desc", nativeQuery = true)
+    @Query(value = "select top(18) id, status_id, book_name, overall_rating, total_rating, updated_date, description, like_count, enabled,started_date, alias_id, creator_id, image_link from Book where enabled = 1 order by like_count desc", nativeQuery = true)
     List<Book> findTop10Book();
 
-    @Query(value = "select top(18) id, status_id, book_name, overall_rating, total_rating, updated_date, description, like_count, enabled,started_date, alias_id, creator_id, image_link from Book order by started_date desc", nativeQuery = true)
+    @Query(value = "select top(18) id, status_id, book_name, overall_rating, total_rating, updated_date, description, like_count, enabled,started_date, alias_id, creator_id, image_link from Book where enabled = 1 order by started_date desc", nativeQuery = true)
     List<Book> findTop10NewestBook();
     Book findById(int id);
     Page<Book> findByCategoriesId(int categoryId, Pageable pageable);

@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class BookController {
     @ResponseBody
     @GetMapping("/search-book")
     public List<Book> getBookByContainName(@RequestHeader String searchword){
-        return bookRepository.findBookByNameContains(searchword);
+        return bookRepository.findBookByNameContains(URLDecoder.decode(searchword));
     }
 
     @ResponseBody
