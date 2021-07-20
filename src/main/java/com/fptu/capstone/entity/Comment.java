@@ -8,6 +8,7 @@ import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -23,7 +24,7 @@ public class Comment {
     private String content;
 
     @Column(name="startedDate")
-    private String startedDate;
+    private Date startedDate;
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
@@ -90,11 +91,11 @@ public class Comment {
         this.user = user;
     }
 
-    public String getStartedDate() {
+    public Date getStartedDate() {
         return startedDate;
     }
 
-    public void setStartedDate(String startedDate) {
+    public void setStartedDate(Date startedDate) {
         this.startedDate = startedDate;
     }
 }

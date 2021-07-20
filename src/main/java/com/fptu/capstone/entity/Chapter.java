@@ -41,6 +41,10 @@ public class Chapter {
     @JsonIgnore
     private List<ChapterComment> comments;
 
+    @ManyToMany(mappedBy = "historyList")
+    @JsonIgnore
+    private List<User> users;
+
     public int getId() {
         return id;
     }
