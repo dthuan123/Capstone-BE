@@ -18,13 +18,18 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     @Query(value = "select top(18) id, status_id, book_name, overall_rating, total_rating, updated_date, description, like_count, enabled,started_date, alias_id, creator_id, image_link from Book where enabled = 1 order by started_date desc", nativeQuery = true)
     List<Book> findTop10NewestBook();
     Book findById(int id);
-    Page<Book> findByCategoriesId(int categoryId, Pageable pageable);
+    Page<Book> findBookByEnabledAndCategoriesId(Boolean enabled, int categoryId, Pageable pageable);
     Page<Book> findALlByCreatorId(int id, Pageable pageable);
+    Page<Book> findBookByEnabledAndCreatorId(Boolean enabled, int id, Pageable pageable);
     Page<Book> findALlByCreatorIdAndNameContains(int id, String name, Pageable pageable);
     Page<Book> findAll(Pageable pageable);
+    Page<Book> findBookByEnabled(Boolean enabled, Pageable pageable);
 
 //    @Query(value = "select r from Book r where r.name like '%:searchword%'")
     List<Book> findBookByNameContains(String searchword);
+
+    //    @Query(value = "select r from Book r where r.name like '%:searchword%'")
+    List<Book> findBookByEnabledAndNameContains(boolean enabled, String searchword);
 
     @Query("SELECT r FROM Book r  WHERE  r.name like %?1%")
     Page<Book> findAllByName(String name, Pageable pageable);

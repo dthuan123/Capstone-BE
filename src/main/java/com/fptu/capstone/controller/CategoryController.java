@@ -32,6 +32,6 @@ public class CategoryController {
     public Page<Book> listBooks(@RequestHeader int categoryId, @RequestHeader int page, @RequestHeader int pageSize,
                                 @RequestHeader String sortField, @RequestHeader String sortOrder) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        return bookRepository.findByCategoriesId(categoryId, pageable);
+        return bookRepository.findBookByEnabledAndCategoriesId(true, categoryId, pageable);
     }
 }
