@@ -1,5 +1,6 @@
 package com.fptu.capstone.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fptu.capstone.entity.*;
 import com.fptu.capstone.repository.*;
 import org.apache.coyote.Response;
@@ -54,7 +55,8 @@ public class ReaderController {
         if(!searchKeyword.equals("")) {
             return reportRepository.findALlByUserSenderIdAndReportContentContains(userId, pageable, searchKeyword);
         }
-        return reportRepository.findByUserSenderIdOrderByReportedDateDesc(userId, pageable);
+        Page<Report> p = reportRepository.findByUserSenderId(userId, pageable);
+        return reportRepository.findByUserSenderId(userId, pageable);
     }
 
     @ResponseBody
@@ -140,7 +142,7 @@ public class ReaderController {
     @GetMapping(value="get/likes")
     public Page<Book> getLikeList(@RequestHeader int userId, @RequestHeader int page, @RequestHeader int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        Page<Book> books = bookRepository.findLikeList(1, pageable);
+        Page<Book> books = bookRepository.findLikeList(userId, pageable);
 
         return books;
     }
