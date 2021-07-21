@@ -90,7 +90,7 @@ public class BookController {
     public Page<Chapter> getAllChapterOfBook(@RequestHeader int bookId, @RequestHeader int page, @RequestHeader int pageSize){
         Pageable pageable = PageRequest.of(page,pageSize);
         scheduleService.publishChapters(bookId);
-        return chapterRepository.findChapterByBookId(bookId, pageable);
+        return chapterRepository.findChapterByBookIdAndChapterStatusId(bookId, 2, pageable);
     }
 
     @ResponseBody

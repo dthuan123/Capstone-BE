@@ -83,6 +83,7 @@ public class CreatorController {
         BookStatus bookStatus = new BookStatus();
         bookStatus.setId(1);
         book.setBookStatus(bookStatus);
+        book.setImageLink("http://localhost:8000/content/images/books/anhdefaul.png");
 
         Book savedBook = bookRepository.save(book);
         try {
@@ -149,6 +150,9 @@ public class CreatorController {
     @PostMapping(value="create/chapter")
     public ResponseEntity createChapter(@RequestBody Chapter chapter) {
         chapter.setStartedDate(new Date());
+        ChapterStatus status = new ChapterStatus();
+        status.setId(1);
+        chapter.setChapterStatus(status);
         chapterRepository.save(chapter);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
