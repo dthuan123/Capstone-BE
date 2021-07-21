@@ -6,6 +6,7 @@ public class SearchBook {
     private String sortField;
     private String sortOrder;
     private String searchKeyword;
+    private int userid;
 
     public int getPage() {
         return page;
@@ -45,5 +46,13 @@ public class SearchBook {
 
     public void setSearchKeyword(String searchKeyword) {
         this.searchKeyword = searchKeyword;
+    }
+
+    public int getUserid() {
+        return userid;
+    }
+
+    public void setUserid(int userid) {
+        this.userid = userid;
     }
 }

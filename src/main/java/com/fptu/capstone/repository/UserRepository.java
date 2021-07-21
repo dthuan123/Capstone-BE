@@ -13,6 +13,10 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT r FROM User r  WHERE  r.name like %?1%")
     Page<User> findAllByName(String name, Pageable pageable);
+
+    @Query("SELECT r FROM User r  WHERE  r.id = ?1")
+    Page<User> findAllById(int id, Pageable pageable);
+
     boolean existsUserByName(String name);
     User findByNameAndPassword(String name, String password);
     List<User> findById(int id);

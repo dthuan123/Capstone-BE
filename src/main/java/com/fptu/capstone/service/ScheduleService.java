@@ -20,7 +20,7 @@ public class ScheduleService {
 
         for(Chapter c: chapters) {
             Date publishedDate = c.getPublishDate();
-            if(publishedDate.after(current)) {
+            if(publishedDate != null && publishedDate.before(current)) {
                 ChapterStatus status = new ChapterStatus();
                 status.setId(2);
                 c.setChapterStatus(status);

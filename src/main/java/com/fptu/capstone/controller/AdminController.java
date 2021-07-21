@@ -51,6 +51,9 @@ public class AdminController {
         if(!search.getSearchKeyword().equals("")) {
             return userRepository.findAllByName(search.getSearchKeyword(),pageable);
         }
+        if(search.getUserid() != -1) {
+            return userRepository.findAllById(search.getUserid(),pageable);
+        }
         return userRepository.findAll(pageable);
     }
 
