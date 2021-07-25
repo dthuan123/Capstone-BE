@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CreatorController {
+public class GetBookListByCreator {
 
     @Autowired
     private MockMvc mockMvc;
