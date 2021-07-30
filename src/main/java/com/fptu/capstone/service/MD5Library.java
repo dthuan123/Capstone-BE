@@ -11,10 +11,12 @@ import java.security.NoSuchAlgorithmException;
 public class MD5Library {
     public String md5(String password){
         String result = "";
+        String saltkey = "$%&$#@^akdmrKDLDGK115";
+        String newpassword = password + saltkey;
         MessageDigest digest;
         try{
             digest = MessageDigest.getInstance("MD5");
-            digest.update(password.getBytes());
+            digest.update(newpassword.getBytes());
             BigInteger bigInteger = new BigInteger(1, digest.digest());
             result = bigInteger.toString(16);
         } catch (NoSuchAlgorithmException e) {
