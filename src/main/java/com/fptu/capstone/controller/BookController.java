@@ -112,7 +112,7 @@ public class BookController {
     @GetMapping("/list-book-by-creator")
     public Page<Book> getAllBookByCreatorId(@RequestHeader int creatorId, @RequestHeader int page, @RequestHeader int pageSize){
         Pageable pageable = PageRequest.of(page, pageSize);
-        return bookRepository.findBookByEnabledAndCategoriesId(true, creatorId, pageable);
+        return bookRepository.findBookByEnabledAndCreatorId(true, creatorId, pageable);
     }
 
     @ResponseBody
