@@ -57,7 +57,7 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
 
-        return null;
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
 //    @ResponseBody

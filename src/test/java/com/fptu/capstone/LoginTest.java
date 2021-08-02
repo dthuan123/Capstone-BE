@@ -56,7 +56,8 @@ public class LoginTest {
         ObjectMapper objectMapper = new ObjectMapper();
         User user = new User();
         user.setName("creator");
-        String password = md5Library.md5("creator");
+//        String password = md5Library.md5("creator");
+        String password = "creator";
         user.setPassword(password);
 
         MvcResult result = this.mockMvc.perform(post("/login")
@@ -64,10 +65,11 @@ public class LoginTest {
                 .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("creator")))
-                .andExpect(jsonPath("$.password", is("2c3b05bd3272da82ccbd4f520d2b5de4")))
-                .andExpect(jsonPath("$.user.role.id", is(2)))
+                .andExpect(jsonPath("$.role.id", is(2)))
                 .andReturn();
-//            assertThat(result).isNotNull();
+
+        String content = result.getResponse().getContentAsString();
+        System.out.println(content + "adad");
     }
 
     @Test
