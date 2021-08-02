@@ -38,7 +38,7 @@ public class LoginTest {
         ObjectMapper objectMapper = new ObjectMapper();
         User user = new User();
         user.setName("reader");
-        String password = md5Library.md5("reader");
+        String password = "reader";
         user.setPassword(password);
 
         MvcResult result = this.mockMvc.perform(post("/login")
@@ -46,17 +46,14 @@ public class LoginTest {
                 .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("reader")))
-                .andExpect(jsonPath("$.password", is("56adcfcf54d78f1dbda34b57861bb48a")))
-                .andExpect(jsonPath("$.user.role.id", is(1)))
+                .andExpect(jsonPath("$.role.id", is(1)))
                 .andReturn();
-//            assertThat(result).isNotNull();
     }
     @Test
     public void testCreatorLogin() throws Exception{
         ObjectMapper objectMapper = new ObjectMapper();
         User user = new User();
         user.setName("creator");
-//        String password = md5Library.md5("creator");
         String password = "creator";
         user.setPassword(password);
 
@@ -77,7 +74,7 @@ public class LoginTest {
         ObjectMapper objectMapper = new ObjectMapper();
         User user = new User();
         user.setName("admin");
-        String password = md5Library.md5("admin");
+        String password = "admin";
         user.setPassword(password);
 
         MvcResult result = this.mockMvc.perform(post("/login")
@@ -85,8 +82,7 @@ public class LoginTest {
                 .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("admin")))
-                .andExpect(jsonPath("$.password", is("8cef5c02dafb8580bad2b4bfdc1b9f9e")))
-                .andExpect(jsonPath("$.user.role.id", is(2)))
+                .andExpect(jsonPath("$.role.id", is(3)))
                 .andReturn();
 //            assertThat(result).isNotNull();
     }
@@ -102,9 +98,8 @@ public class LoginTest {
         MvcResult result = this.mockMvc.perform(post("/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(user)))
+                .andExpect(jsonPath("$.name", is(null)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is("vanhdao")))
-                .andExpect(jsonPath("$.password", is("ef144aff444dd46251b643370ec5e0dd")))
                 .andReturn();
 //            assertThat(result).isNotNull();
     }

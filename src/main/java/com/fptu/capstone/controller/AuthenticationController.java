@@ -41,7 +41,7 @@ public class AuthenticationController {
             return userDB;
         }
 
-        return null;
+        return userDB;
     }
     @ResponseBody
     @PostMapping(value="/register")

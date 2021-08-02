@@ -28,8 +28,8 @@ public class RegisterTest {
         role.setId(1);
         user.setRole(role);
         user.setApproved(false);
-        user.setName("vanhdao99");
-        user.setPassword("vanhdao99");
+        user.setName("vanhdao999");
+        user.setPassword("vanhdao999");
         user.setEmail("vanhdao99@gmail.com");
         user.setPhone("0377999333");
         user.setEnabled(true);
