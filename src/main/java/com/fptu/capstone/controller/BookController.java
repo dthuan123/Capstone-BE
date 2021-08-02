@@ -121,6 +121,7 @@ public class BookController {
         User user = userRepository.findById(userId).get(0);
         List<Book> likedList = user.getLikedList();
         Book book = bookRepository.findById(bookId);
+        Book savedBook = null;
         boolean isLiked = false;
 
         for (Book bookLiked : likedList) {
@@ -134,15 +135,15 @@ public class BookController {
                 book.setLikes(likeCount - 1);
                 likedList.remove(book);
                 userRepository.save(user);
-                bookRepository.save(book);
+                savedBook = bookRepository.save(book);
             }else {
                 book.setLikes(likeCount + 1);
                 //update user;
                 likedList.add(book);
                 userRepository.save(user);
-                bookRepository.save(book);
+                savedBook = bookRepository.save(book);
             }
-        return book;
+        return savedBook;
     }
 
     @ResponseBody

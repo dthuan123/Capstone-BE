@@ -41,7 +41,7 @@ public class AuthenticationController {
             return userDB;
         }
 
-        return null;
+        return userDB;
     }
     @ResponseBody
     @PostMapping(value="/register")
@@ -57,7 +57,7 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
 
-        return null;
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
 //    @ResponseBody
