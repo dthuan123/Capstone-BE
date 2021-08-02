@@ -42,9 +42,6 @@ public class CreatorController {
     @Autowired
     BookStatusRepository bookStatusRepository;
 
-    @Autowired
-    ChapterCommentRepository chapterCommentRepository;
-
     private static String imageBaseURL = "http://localhost:8000/content/images/books/";
 
 
@@ -62,7 +59,7 @@ public class CreatorController {
     }
 
     @ResponseBody
-    @GetMapping(value="get/book")
+    @GetMapping(value="/get/book")
     public Book getBook(@RequestHeader int bookId) {
         return bookRepository.findById(bookId);
     }
