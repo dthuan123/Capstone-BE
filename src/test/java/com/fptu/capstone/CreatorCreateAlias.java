@@ -32,7 +32,7 @@ public class CreatorCreateAlias {
         User user = new User();
         user.setId(2);
         Alias alias = new Alias();
-        alias.setName("nghệ danh");
+        alias.setName("nghệ danh nghệ");
         alias.setUser(user);
 
         MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.post("/creator/create/alias")
