@@ -78,8 +78,13 @@ public class ReaderController {
     @ResponseBody
     @GetMapping(value="account/seeInfo")
     public User seeAccountInformation(@RequestHeader int userId) {
-        User user = userRepository.findById(userId).get(0);
-        return user;
+        try {
+            User user = userRepository.findById(userId).get(0);
+            return user;
+        } catch (NullPointerException e){
+            System.out.println(e);
+        }
+        return null;
     }
 
     @ResponseBody
@@ -149,7 +154,7 @@ public class ReaderController {
 
     @ResponseBody
     @PostMapping(value="rate")
-    public void updateBook(@RequestPart Book book, @RequestPart float rating)  {
+    public Book updateBook(@RequestPart Book book, @RequestPart float rating)  {
         int totalRating = book.getTotalRating();
         float oldRating = book.getOverallRating();
 
@@ -157,15 +162,15 @@ public class ReaderController {
 
         book.setOverallRating(newRating);
         book.setTotalRating(totalRating + 1);
-        bookRepository.save(book);
+        return bookRepository.save(book);
     }
 
     @ResponseBody
     @PostMapping(value="comment")
     public ResponseEntity addBookComment(@RequestBody Comment comment) {
         comment.setStartedDate(new Date());
-        commentRepository.save(comment);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        Comment savedComment = commentRepository.save(comment);
+        return ResponseEntity.status(HttpStatus.OK).body(savedComment);
     }
 
     @ResponseBody
