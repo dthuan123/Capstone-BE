@@ -53,7 +53,8 @@ public class BookController {
     @ResponseBody
     @GetMapping("/search-book")
     public List<Book> getBookByContainName(@RequestHeader String searchword){
-        return bookRepository.findBookByEnabledAndNameContains(true, URLDecoder.decode(searchword));
+        List<Book> resultBook = bookRepository.findBookByEnabledAndNameContains(true, URLDecoder.decode(searchword));
+        return resultBook;
     }
 
     @ResponseBody

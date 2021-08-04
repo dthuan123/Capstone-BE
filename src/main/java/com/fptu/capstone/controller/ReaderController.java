@@ -78,8 +78,13 @@ public class ReaderController {
     @ResponseBody
     @GetMapping(value="account/seeInfo")
     public User seeAccountInformation(@RequestHeader int userId) {
-        User user = userRepository.findById(userId).get(0);
-        return user;
+        try {
+            User user = userRepository.findById(userId).get(0);
+            return user;
+        } catch (NullPointerException e){
+            System.out.println(e);
+        }
+        return null;
     }
 
     @ResponseBody
