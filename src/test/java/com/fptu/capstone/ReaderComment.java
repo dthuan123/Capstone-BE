@@ -99,4 +99,13 @@ public class ReaderComment {
                 .andExpect(status().isBadRequest())
                 .andReturn();
     }
+
+    @Test
+    @Transactional
+    public void testReaderCommentWithoutParam() throws Exception {
+        MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.post("/reader/comment")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+    }
 }
