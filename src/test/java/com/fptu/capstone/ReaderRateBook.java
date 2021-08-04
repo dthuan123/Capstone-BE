@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -61,8 +62,8 @@ public class ReaderRateBook {
 
     @Test
     public void testRateBookWithNoParams() throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/reader/rate"))
-                .andExpect(status().isMethodNotAllowed())
+        MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.post("/reader/rate"))
+                .andExpect(status().isBadRequest())
                 .andReturn();
     }
 }

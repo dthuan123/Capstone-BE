@@ -39,7 +39,7 @@ public class ReaderCreateReport {
         report.setReportContent("Tôi muốn báo cáo truyện này");
         report.setReportedDate(new Date(2021-8-01));
         report.setResponseContent("");
-        report.setResponseDate(new Date(2021-8-03));
+        report.setResponseDate(new Date());
         report.setUserSender(userSender);
         report.setUserReceiver(userReceiver);
         report.setBook(book);

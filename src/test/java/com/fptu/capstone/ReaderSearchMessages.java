@@ -37,6 +37,20 @@ public class ReaderSearchMessages {
     }
 
     @Test
+    public void testSearchMessagesBySpecialKeyword() throws Exception {
+        MvcResult result = this.mockMvc.perform(get("/reader/message-list")
+                .header("page", 0)
+                .header("pageSize", 5)
+                .header("userId", 1)
+                .header("searchKeyword", "-"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content",  hasSize(1)))
+                .andReturn();
+        String content = result.getResponse().getContentAsString();
+        System.out.println(content);
+    }
+
+    @Test
     public void testSearchMessagesByKeywordHaveNoResult() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/reader/message-list")
                 .header("page", 0)

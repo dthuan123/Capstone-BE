@@ -80,7 +80,7 @@ public class ReaderGetMessageList {
                 .header("page", 50)
                 .header("pageSize", 5)
                 .header("userId", 1)
-                .header("searchKeyword", "bị đạo"))
+                .header("searchKeyword", ""))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(0)))
                 .andReturn();
