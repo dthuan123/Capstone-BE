@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -35,10 +36,10 @@ public class ReaderCreateReport {
         ReportStatus reportStatus = new ReportStatus();
         reportStatus.setStatusId(1);
         Report report = new Report();
-        report.setReportContent("test create new report");
+        report.setReportContent("Tôi muốn báo cáo truyện này");
         report.setReportedDate(new Date(2021-8-01));
-        report.setResponseContent("test response content of report");
-        report.setResponseDate(new Date(2021-8-03));
+        report.setResponseContent("");
+        report.setResponseDate(new Date());
         report.setUserSender(userSender);
         report.setUserReceiver(userReceiver);
         report.setBook(book);
@@ -48,6 +49,15 @@ public class ReaderCreateReport {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(report)))
                 .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    @Transactional
+    public void testCreateReportWithoutParam() throws Exception {
+        MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.post("/reader/create-report")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
                 .andReturn();
     }
 }

@@ -68,20 +68,6 @@ public class ReaderGetMessageList {
     }
 
     @Test
-    public void testGetMessagesByKeyword() throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/reader/message-list")
-                .header("page", 0)
-                .header("pageSize", 5)
-                .header("userId", 1)
-                .header("searchKeyword", "bị đạo"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].reportContent", is("Tôi thấy truyện bị đạo")))
-                .andReturn();
-        String content = result.getResponse().getContentAsString();
-        System.out.println(content);
-    }
-
-    @Test
     public void testGetMessagesWithNoParameters() throws Exception {
         MvcResult result = this.mockMvc.perform(get("/reader/message-list"))
                 .andExpect(status().isBadRequest())
@@ -94,7 +80,7 @@ public class ReaderGetMessageList {
                 .header("page", 50)
                 .header("pageSize", 5)
                 .header("userId", 1)
-                .header("searchKeyword", "bị đạo"))
+                .header("searchKeyword", ""))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(0)))
                 .andReturn();

@@ -39,35 +39,13 @@ public class ReaderComment {
         Comment comment = new Comment();
         comment.setBook(book);
         comment.setUser(user);
-        comment.setContent("My comment");
+        comment.setContent("Bình luận mới");
 
         MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.post("/reader/comment")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(comment)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", is("My comment")))
-                .andReturn();
-    }
-
-    @Test
-    @Transactional
-    public void testReaderCommentNoParams() throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
-        User user = new User();
-        user.setId(1);
-        User creator = new User();
-        creator.setId(2);
-        Book book = new Book();
-        book.setId(1);
-        book.setCreator(creator);
-        Comment comment = new Comment();
-        comment.setBook(book);
-        comment.setUser(user);
-        comment.setContent("My comment");
-
-        MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.post("/reader/comment")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.content", is("Bình luận mới")))
                 .andReturn();
     }
 
@@ -79,7 +57,7 @@ public class ReaderComment {
         user.setId(1);
         Comment comment = new Comment();
         comment.setUser(user);
-        comment.setContent("My comment");
+        comment.setContent("Bình luận mới");
 
         MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.post("/reader/comment")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -92,8 +70,17 @@ public class ReaderComment {
     public void testReaderCommentNoUser() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         Comment comment = new Comment();
-        comment.setContent("My comment");
+        comment.setContent("Bình luận mới");
 
+        MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.post("/reader/comment")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+    }
+
+    @Test
+    @Transactional
+    public void testReaderCommentWithoutParam() throws Exception {
         MvcResult result = this.mockMvc.perform(MockMvcRequestBuilders.post("/reader/comment")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())

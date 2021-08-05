@@ -53,10 +53,10 @@ public class ReaderController {
         Pageable pageable = PageRequest.of(page, pageSize);
         searchKeyword = URLDecoder.decode(searchKeyword);
         if(!searchKeyword.equals("")) {
-            return reportRepository.findALlByUserSenderIdAndReportContentContains(userId, pageable, searchKeyword);
+            return reportRepository.findALlByUserSenderIdAndReportContentContainsOrderByReportedDateDesc(userId, pageable, searchKeyword);
         }
-        Page<Report> p = reportRepository.findByUserSenderId(userId, pageable);
-        return reportRepository.findByUserSenderId(userId, pageable);
+        Page<Report> p = reportRepository.findByUserSenderIdOrderByReportedDateDesc(userId, pageable);
+        return reportRepository.findByUserSenderIdOrderByReportedDateDesc(userId, pageable);
     }
 
     @ResponseBody
@@ -71,7 +71,9 @@ public class ReaderController {
     public ResponseEntity createReport(@RequestBody Report report) {
         Date date = new Date();
         report.setReportedDate(new Date());
-        reportRepository.save(report);
+        if(!report.getReportContent().isEmpty()) {
+            reportRepository.save(report);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(report);
     }
 
