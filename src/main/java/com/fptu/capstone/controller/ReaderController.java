@@ -53,10 +53,10 @@ public class ReaderController {
         Pageable pageable = PageRequest.of(page, pageSize);
         searchKeyword = URLDecoder.decode(searchKeyword);
         if(!searchKeyword.equals("")) {
-            return reportRepository.findALlByUserSenderIdAndReportContentContains(userId, pageable, searchKeyword);
+            return reportRepository.findALlByUserSenderIdAndReportContentContainsOrderByReportedDateDesc(userId, pageable, searchKeyword);
         }
-        Page<Report> p = reportRepository.findByUserSenderId(userId, pageable);
-        return reportRepository.findByUserSenderId(userId, pageable);
+        Page<Report> p = reportRepository.findByUserSenderIdOrderByReportedDateDesc(userId, pageable);
+        return reportRepository.findByUserSenderIdOrderByReportedDateDesc(userId, pageable);
     }
 
     @ResponseBody
