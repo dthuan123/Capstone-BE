@@ -171,6 +171,8 @@ public class ReaderController {
     @PostMapping(value="comment")
     public ResponseEntity addBookComment(@RequestBody Comment comment) {
         comment.setStartedDate(new Date());
+        Book book = bookRepository.findById(comment.getBook().getId());
+        comment.setBook(book);
         Comment savedComment = commentRepository.save(comment);
         return ResponseEntity.status(HttpStatus.OK).body(savedComment);
     }
