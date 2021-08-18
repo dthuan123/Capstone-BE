@@ -42,9 +42,6 @@ public class CreatorController {
     @Autowired
     BookStatusRepository bookStatusRepository;
 
-    @Autowired
-    ChapterCommentRepository chapterCommentRepository;
-
     private static String imageBaseURL = "http://localhost:8000/content/images/books/";
 
 
@@ -62,7 +59,7 @@ public class CreatorController {
     }
 
     @ResponseBody
-    @GetMapping(value="get/book")
+    @GetMapping(value="/get/book")
     public Book getBook(@RequestHeader int bookId) {
         return bookRepository.findById(bookId);
     }
@@ -83,6 +80,7 @@ public class CreatorController {
         BookStatus bookStatus = new BookStatus();
         bookStatus.setId(1);
         book.setBookStatus(bookStatus);
+        book.setImageLink("http://localhost:8000/content/images/books/anhdefaul.png");
 
         Book savedBook = bookRepository.save(book);
         try {
@@ -149,6 +147,9 @@ public class CreatorController {
     @PostMapping(value="create/chapter")
     public ResponseEntity createChapter(@RequestBody Chapter chapter) {
         chapter.setStartedDate(new Date());
+        ChapterStatus status = new ChapterStatus();
+        status.setId(1);
+        chapter.setChapterStatus(status);
         chapterRepository.save(chapter);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }

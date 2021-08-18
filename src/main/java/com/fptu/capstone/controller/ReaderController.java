@@ -1,5 +1,6 @@
 package com.fptu.capstone.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fptu.capstone.entity.*;
 import com.fptu.capstone.repository.*;
 import org.apache.coyote.Response;
@@ -52,8 +53,9 @@ public class ReaderController {
         Pageable pageable = PageRequest.of(page, pageSize);
         searchKeyword = URLDecoder.decode(searchKeyword);
         if(!searchKeyword.equals("")) {
-            return reportRepository.findALlByUserSenderIdAndReportContentContains(userId, pageable, searchKeyword);
+            return reportRepository.findALlByUserSenderIdAndReportContentContainsOrderByReportedDateDesc(userId, pageable, searchKeyword);
         }
+        Page<Report> p = reportRepository.findByUserSenderIdOrderByReportedDateDesc(userId, pageable);
         return reportRepository.findByUserSenderIdOrderByReportedDateDesc(userId, pageable);
     }
 
@@ -69,15 +71,22 @@ public class ReaderController {
     public ResponseEntity createReport(@RequestBody Report report) {
         Date date = new Date();
         report.setReportedDate(new Date());
-        reportRepository.save(report);
+        if(!report.getReportContent().isEmpty()) {
+            reportRepository.save(report);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(report);
     }
 
     @ResponseBody
     @GetMapping(value="account/seeInfo")
     public User seeAccountInformation(@RequestHeader int userId) {
-        User user = userRepository.findById(userId).get(0);
-        return user;
+        try {
+            User user = userRepository.findById(userId).get(0);
+            return user;
+        } catch (NullPointerException e){
+            System.out.println(e);
+        }
+        return null;
     }
 
     @ResponseBody
@@ -140,14 +149,14 @@ public class ReaderController {
     @GetMapping(value="get/likes")
     public Page<Book> getLikeList(@RequestHeader int userId, @RequestHeader int page, @RequestHeader int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        Page<Book> books = bookRepository.findLikeList(1, pageable);
+        Page<Book> books = bookRepository.findLikeList(userId, pageable);
 
         return books;
     }
 
     @ResponseBody
     @PostMapping(value="rate")
-    public void updateBook(@RequestPart Book book, @RequestPart float rating)  {
+    public Book updateBook(@RequestPart Book book, @RequestPart float rating)  {
         int totalRating = book.getTotalRating();
         float oldRating = book.getOverallRating();
 
@@ -155,15 +164,15 @@ public class ReaderController {
 
         book.setOverallRating(newRating);
         book.setTotalRating(totalRating + 1);
-        bookRepository.save(book);
+        return bookRepository.save(book);
     }
 
     @ResponseBody
     @PostMapping(value="comment")
     public ResponseEntity addBookComment(@RequestBody Comment comment) {
         comment.setStartedDate(new Date());
-        commentRepository.save(comment);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        Comment savedComment = commentRepository.save(comment);
+        return ResponseEntity.status(HttpStatus.OK).body(savedComment);
     }
 
     @ResponseBody

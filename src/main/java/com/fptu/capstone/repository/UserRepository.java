@@ -11,8 +11,15 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
-    @Query("SELECT r FROM User r  WHERE  r.name like %?1%")
+    @Query("SELECT r FROM User r  WHERE  r.name like %?1% AND r.role.id <> 3")
     Page<User> findAllByName(String name, Pageable pageable);
+
+    @Query("SELECT r FROM User r  WHERE r.role.id <> 3")
+    Page<User> findAll(Pageable pageable);
+
+    @Query("SELECT r FROM User r INNER JOIN Alias  a ON a.user.id = r.id WHERE  a.id = ?1")
+    Page<User> findAllById(int id, Pageable pageable);
+
     boolean existsUserByName(String name);
     User findByNameAndPassword(String name, String password);
     List<User> findById(int id);

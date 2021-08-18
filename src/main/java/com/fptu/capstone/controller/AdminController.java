@@ -1,28 +1,34 @@
 package com.fptu.capstone.controller;
 
 
-import com.fptu.capstone.entity.Book;
-import com.fptu.capstone.entity.Report;
-import com.fptu.capstone.entity.SearchBook;
-import com.fptu.capstone.entity.User;
+import com.fptu.capstone.entity.*;
 import com.fptu.capstone.repository.BookRepository;
+import com.fptu.capstone.repository.CategoryRepository;
 import com.fptu.capstone.repository.ReportRepository;
 import com.fptu.capstone.repository.UserRepository;
 import com.fptu.capstone.service.BookEditService;
 import com.fptu.capstone.service.ReportEditService;
 import com.fptu.capstone.service.UserEditService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
 import java.util.List;
 
 @CrossOrigin
 @RestController
 @RequestMapping("admin")
 public class AdminController {
+
+    @Autowired
+    CategoryRepository categoryRepository;
+
     final UserRepository userRepository;
     final ReportRepository reportRepository;
     final BookRepository bookRepository;
@@ -50,6 +56,9 @@ public class AdminController {
         Pageable pageable = PageRequest.of(search.getPage(), search.getPageSize(), sort);
         if(!search.getSearchKeyword().equals("")) {
             return userRepository.findAllByName(search.getSearchKeyword(),pageable);
+        }
+        if(search.getUserid() != -1) {
+            return userRepository.findAllById(search.getUserid(),pageable);
         }
         return userRepository.findAll(pageable);
     }
@@ -128,5 +137,25 @@ public class AdminController {
         return bookEditService.enabled(bookid
         );
     }
+
+    @ResponseBody
+    @GetMapping(value="categories")
+    public Page<Category> getCategories(@RequestHeader int page, @RequestHeader int pageSize, @RequestHeader String searchKeyword) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        searchKeyword = URLDecoder.decode(searchKeyword);
+        if(!searchKeyword.equals("")) {
+            return categoryRepository.findAllByNameContains(searchKeyword, pageable);
+        }
+        return categoryRepository.findAll(pageable);
+    }
+
+    @ResponseBody
+    @PostMapping(value="categories")
+    public ResponseEntity addCategory(@RequestBody Category category) {
+        categoryRepository.save(category);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
+
+
 
 }

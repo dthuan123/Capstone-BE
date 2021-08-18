@@ -41,7 +41,7 @@ public class AuthenticationController {
             return userDB;
         }
 
-        return null;
+        return userDB;
     }
     @ResponseBody
     @PostMapping(value="/register")
@@ -57,7 +57,7 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
 
-        return null;
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
 //    @ResponseBody
@@ -73,12 +73,14 @@ public class AuthenticationController {
     public ResponseEntity changePassword(@RequestPart String password, @RequestPart int userId, @RequestPart String oldPassword){
         String md5OldPassword = md5Library.md5(oldPassword.replace("\"",""));
         User user = userRepository.getById(userId);
+        User userSave = new User();
         if(md5OldPassword.equals(user.getPassword())){
             user.setPassword(md5Library.md5(password.replace("\"", "")));
-            userRepository.save(user);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Old password is not correct.");
+            userSave = userRepository.save(user);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(userSave);
     }
 }

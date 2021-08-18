@@ -53,7 +53,8 @@ public class BookController {
     @ResponseBody
     @GetMapping("/search-book")
     public List<Book> getBookByContainName(@RequestHeader String searchword){
-        return bookRepository.findBookByEnabledAndNameContains(true, URLDecoder.decode(searchword));
+        List<Book> resultBook = bookRepository.findBookByEnabledAndNameContains(true, URLDecoder.decode(searchword));
+        return resultBook;
     }
 
     @ResponseBody
@@ -70,7 +71,7 @@ public class BookController {
             sortField = Sort.by("name").ascending();
         }
         Pageable pageable = PageRequest.of(page, pageSize, sortField);
-        return bookRepository.findAll(pageable);
+        return bookRepository.findBookByEnabled(true, pageable);
     }
 
     @ResponseBody
@@ -90,7 +91,7 @@ public class BookController {
     public Page<Chapter> getAllChapterOfBook(@RequestHeader int bookId, @RequestHeader int page, @RequestHeader int pageSize){
         Pageable pageable = PageRequest.of(page,pageSize);
         scheduleService.publishChapters(bookId);
-        return chapterRepository.findChapterByBookId(bookId, pageable);
+        return chapterRepository.findChapterByBookIdAndChapterStatusId(bookId, 2, pageable);
     }
 
     @ResponseBody
@@ -112,7 +113,7 @@ public class BookController {
     @GetMapping("/list-book-by-creator")
     public Page<Book> getAllBookByCreatorId(@RequestHeader int creatorId, @RequestHeader int page, @RequestHeader int pageSize){
         Pageable pageable = PageRequest.of(page, pageSize);
-        return bookRepository.findALlByCreatorId(creatorId, pageable);
+        return bookRepository.findBookByEnabledAndCreatorId(true, creatorId, pageable);
     }
 
     @ResponseBody
@@ -121,6 +122,7 @@ public class BookController {
         User user = userRepository.findById(userId).get(0);
         List<Book> likedList = user.getLikedList();
         Book book = bookRepository.findById(bookId);
+        Book savedBook = null;
         boolean isLiked = false;
 
         for (Book bookLiked : likedList) {
@@ -134,15 +136,15 @@ public class BookController {
                 book.setLikes(likeCount - 1);
                 likedList.remove(book);
                 userRepository.save(user);
-                bookRepository.save(book);
+                savedBook = bookRepository.save(book);
             }else {
                 book.setLikes(likeCount + 1);
                 //update user;
                 likedList.add(book);
                 userRepository.save(user);
-                bookRepository.save(book);
+                savedBook = bookRepository.save(book);
             }
-        return book;
+        return savedBook;
     }
 
     @ResponseBody
