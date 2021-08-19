@@ -46,6 +46,7 @@ public class AudioController {
             out.close();
             in.close();
             file.delete();
+            System.out.println("Finished");
         } catch (Exception e) {
             e.printStackTrace();
         }

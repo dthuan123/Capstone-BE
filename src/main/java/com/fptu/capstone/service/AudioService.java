@@ -2,18 +2,17 @@ package com.fptu.capstone.service;
 
 import com.fptu.capstone.entity.Chapter;
 import com.fptu.capstone.repository.ChapterRepository;
+import com.google.api.gax.core.CredentialsProvider;
+import com.google.api.gax.core.FixedCredentialsProvider;
+import com.google.auth.oauth2.ServiceAccountCredentials;
+import com.google.cloud.texttospeech.v1.*;
 import com.google.common.html.HtmlEscapers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.cloud.texttospeech.v1.AudioConfig;
-import com.google.cloud.texttospeech.v1.AudioEncoding;
-import com.google.cloud.texttospeech.v1.SsmlVoiceGender;
-import com.google.cloud.texttospeech.v1.SynthesisInput;
-import com.google.cloud.texttospeech.v1.SynthesizeSpeechResponse;
-import com.google.cloud.texttospeech.v1.TextToSpeechClient;
-import com.google.cloud.texttospeech.v1.VoiceSelectionParams;
 import com.google.protobuf.ByteString;
+
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -30,8 +29,15 @@ public class AudioService {
     ChapterRepository chapterRepository;
 
     public byte[] getAudio(int chapterId, boolean female) {
+
         // Instantiates a client
-        try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
+//        try (TextToSpeechClient textToSpeechClient = TextToSpeechClient.create()) {
+        try {
+            String jsonPath = "C:\\Users\\thuannd\\Desktop\\Capstone\\capstoneproject-323315-cb2ddb4c6613.json";
+            CredentialsProvider credentialsProvider = FixedCredentialsProvider.create(ServiceAccountCredentials.fromStream(new FileInputStream(jsonPath)));
+            TextToSpeechSettings settings = TextToSpeechSettings.newBuilder().setCredentialsProvider(credentialsProvider).build();
+            //Instantiates a client
+            TextToSpeechClient textToSpeechClient = TextToSpeechClient.create(settings);
             VoiceSelectionParams voice =
                     VoiceSelectionParams.newBuilder()
                             .setLanguageCode("vi-VN")
@@ -49,6 +55,8 @@ public class AudioService {
             Chapter chapter = chapterRepository.findById(chapterId);
             String text = chapter.getContent();
             text = text.replaceAll("\\<.*?>","");
+            System.out.println(text.length());
+
             int part = text.length() / 2500;
             if(text.length() % 2500 != 0) {
                 part++;
