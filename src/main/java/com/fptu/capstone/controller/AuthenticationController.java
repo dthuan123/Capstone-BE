@@ -79,7 +79,7 @@ public class AuthenticationController {
             userSave = userRepository.save(user);
         }
         else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Old password is not correct.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(userSave);
     }

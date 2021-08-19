@@ -44,7 +44,7 @@ public class ReaderSearchMessages {
                 .header("userId", 1)
                 .header("searchKeyword", "-"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content",  hasSize(1)))
+                .andExpect(jsonPath("$.content",  hasSize(0)))
                 .andReturn();
         String content = result.getResponse().getContentAsString();
         System.out.println(content);
