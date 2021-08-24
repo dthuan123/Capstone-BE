@@ -71,6 +71,39 @@ public class CreatorController {
     }
 
     @ResponseBody
+    @GetMapping(value="get/next-chapter")
+    public int getNextChapter(@RequestHeader int chapterId) {
+        Chapter chapter = chapterRepository.findById(chapterId);
+        Book book = chapter.getBook();
+        List<Chapter> chapters = chapterRepository.findByBookIdAndChapterStatusId(book.getId(), 2);
+
+        for (Chapter nextChapter: chapters
+             ) {
+            if(nextChapter.getId()>chapterId){
+                return nextChapter.getId();
+            }
+        }
+        return 0;
+    }
+
+    @ResponseBody
+    @GetMapping(value="get/pre-chapter")
+    public int getPreChapter(@RequestHeader int chapterId) {
+        Chapter chapter = chapterRepository.findById(chapterId);
+        Book book = chapter.getBook();
+        List<Chapter> chapters = chapterRepository.findByBookIdAndChapterStatusId(book.getId(), 2);
+
+        for(int i=0; i<chapters.size(); i++){
+            if(chapters.get(0).getId()==chapterId){
+                return 0;
+            }
+            else if(chapters.get(i).getId()==chapterId){
+                return chapters.get(i-1).getId();
+            }
+        }
+        return 0;
+    }
+    @ResponseBody
     @PostMapping(value="create/book", consumes = {   "multipart/form-data" })
     public boolean createBook(@RequestPart("book") Book book, @RequestPart(value = "coverImage", required=false) MultipartFile coverImage) {
         book.setEnabled(true);
